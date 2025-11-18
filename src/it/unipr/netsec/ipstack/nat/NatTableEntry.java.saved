@@ -1,0 +1,63 @@
+package it.unipr.netsec.ipstack.nat;
+
+import it.unipr.netsec.ipstack.ip4.SocketAddress;
+
+/** An entry of a NAT table.
+ * <br>
+ * It includes the four socket addresses (referring to a packet going from internal to external network):
+ * <ul>
+ * <li>internal source socket address (IP address and port)</li>
+ * <li>internal destination socket address</li>
+ * <li>external source socket address</li>
+ * <li>external destination socket address</li>
+ * </ul>
+ * <p>
+ * Note that in the classical NAPT, the internal and external destination socket addresses coincide.
+ */
+public class NatTableEntry {
+
+	private SocketAddress int_src_soaddr, int_dst_soaddr, ext_src_soaddr, ext_dst_soaddr;
+	
+	
+	/** Creates a new entry.
+	 * @param int_src_soaddr internal source socket address (IP address and port)
+	 * @param int_dst_soaddr internal destination socket address
+	 * @param ext_src_soaddr external source socket address
+	 * @param ext_dst_soaddr external destination socket address */
+	public NatTableEntry(SocketAddress int_src_soaddr, SocketAddress int_dst_soaddr, SocketAddress ext_src_soaddr, SocketAddress ext_dst_soaddr) {
+		this.int_src_soaddr=int_src_soaddr;
+		this.int_dst_soaddr=int_dst_soaddr;
+		this.ext_src_soaddr=ext_src_soaddr;
+		this.ext_dst_soaddr=ext_dst_soaddr;
+	}
+	
+	/** Gets the internal source socket address
+	 * @return the socket address */
+	public SocketAddress getIntSourceSocketAddress() {
+		return int_src_soaddr;
+	}
+	
+	/** Gets the internal destination socket address
+	 * @return the socket address */
+	public SocketAddress getIntDestSocketAddress() {
+		return int_dst_soaddr;
+	}
+
+	/** Gets the external source socket address
+	 * @return the socket address */
+	public SocketAddress getExtSourceSocketAddress() {
+		return ext_src_soaddr;
+	}
+
+	/** Gets the external destination socket address
+	 * @return the socket address */
+	public SocketAddress getExtDestSocketAddress() {
+		return ext_dst_soaddr;
+	}
+	
+	@Override
+	public String toString() {
+		return int_src_soaddr+","+int_dst_soaddr+","+ext_src_soaddr+","+ext_dst_soaddr;
+	}
+
+}

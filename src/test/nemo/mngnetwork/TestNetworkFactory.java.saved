@@ -1,0 +1,240 @@
+package test.nemo.mngnetwork;
+
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.zoolu.util.json.JsonUtils;
+
+import it.unipr.netsec.ipstack.ethernet.EthAddress;
+import it.unipr.netsec.ipstack.ip4.Ip4Address;
+import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
+import it.unipr.netsec.ipstack.ip4.Ip4Packet;
+import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
+import it.unipr.netsec.ipstack.link.Link;
+import it.unipr.netsec.ipstack.link.LinkInterface;
+import it.unipr.netsec.ipstack.net.NetInterface;
+import it.unipr.netsec.ipstack.routing.Route;
+import it.unipr.netsec.ipstack.routing.RoutingTable;
+import it.unipr.netsec.ipstack.stack.Links;
+import it.unipr.netsec.nemo.ip.Ip4Host;
+import it.unipr.netsec.nemo.ip.Ip4Node;
+import it.unipr.netsec.nemo.ip.Ip4Router;
+import it.unipr.netsec.nemo.link.Network;
+import it.unipr.netsec.tuntap.Ip4TuntapInterface;
+import it.unipr.netsec.tuntap.TuntapSocket;
+import test.nemo.mngnetwork.info.ConfigInterfaceInfo;
+import test.nemo.mngnetwork.info.ConfigNetworkInfo;
+import test.nemo.mngnetwork.info.ConfigNodeInfo;
+import test.nemo.mngnetwork.info.RouteInfo;
+
+
+/** Builds a test network.
+ * The network is formed by a backbone with one or more attached subnetworks.
+ * The subnetworks are two-level trees.
+ * <br>
+ * Each network node (either host or router) runs a TELNET server (port 23).
+ * Moreover, each host runs a web server (port 80).
+ */
+public class TestNetworkFactory {
+	
+	public static Network<Ip4Node,Link<Ip4Address,Ip4Packet>> getInstance(TuntapInterfaceFactory r0_nif, String default_router, HashMap<String,String> auth_db0, TestNetworkInfo cfg) {
+		Network<Ip4Node,Link<Ip4Address,Ip4Packet>> network=new Network<Ip4Node,Link<Ip4Address,Ip4Packet>>() {
+			TestNetworkInfo saved_cfg=cfg;	
+			TuntapInterfaceFactory saved_r0_nif=r0_nif;
+			String saved_default_router=default_router;
+			HashMap<String,String> saved_auth_db0=auth_db0;
+			@Override
+			public void rebuild(String cfg_json) {
+				if (cfg_json!=null) JsonUtils.fromJson(cfg_json,saved_cfg);
+				clear();
+				build(this,saved_r0_nif,saved_default_router,saved_auth_db0,saved_cfg);
+			}
+			@Override
+			public void clear() {
+				super.clear();
+				Links.prune();
+			}
+		};
+		build(network,r0_nif,default_router,auth_db0,cfg);
+		return network;
+	}
+
+	private static void build(Network<Ip4Node,Link<Ip4Address,Ip4Packet>> network, TuntapInterfaceFactory r0_nif, String default_router, HashMap<String,String> auth_db0, TestNetworkInfo cfg) {		
+		System.out.println("TestNetworkBuilder: build(): "+JsonUtils.toJson(cfg));
+		Link<Ip4Address,Ip4Packet> link0=new Link<>();
+		Links.putLink("link-0",link0);
+		if (r0_nif!=null) {
+			try {
+				NetInterface<Ip4Address, Ip4Packet> r0_ni1=r0_nif.getInstance();
+				Ip4AddressPrefix r0_addr2=new Ip4AddressPrefix("10.0.0.254/24");
+				NetInterface<Ip4Address,Ip4Packet> r0_ni2=new LinkInterface<>(link0,r0_addr2);
+				Ip4Router r0=new Ip4Router(new Ip4Address(cfg.loopback_addr_prefix+0+'.'+254),r0_ni1,r0_ni2);
+				if (default_router!=null) r0.getRoutingTable().set(Ip4Prefix.ANY,new Ip4Address(default_router));
+				for (int i=1; i<=cfg.num_nets; i++) {
+					r0.getRoutingTable().add(new Ip4Prefix("10."+i+".0.0/16"),new Ip4Address("10.0.0."+i));
+				}
+				r0.startTelnetServer(auth_db0);
+				network.addNode(r0);
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}	
+		
+		for (int k=1; k<=cfg.num_nets; k++) {
+			// configuration of subnetwork k			
+			Link<Ip4Address,Ip4Packet> link1=new Link<>();
+			Links.putLink("link-"+k+".0",link1);
+			// router level 1
+			Ip4Router r1=new Ip4Router(new Ip4Address(cfg.loopback_addr_prefix+0+'.'+k));
+			if (cfg.ni_auto_conf) {
+				NetInterface<Ip4Address,Ip4Packet> ni11=new LinkInterface<>(link0);
+				NetInterface<Ip4Address,Ip4Packet> ni12=new LinkInterface<>(link1);
+				r1.addNetInterface(ni11);
+				r1.addNetInterface(ni12);
+				if (cfg.addr_auto_conf) {
+					r1.addAddress(ni11,new Ip4AddressPrefix("10.0.0."+k+"/24"));
+					r1.addAddress(ni12,new Ip4AddressPrefix("10."+k+".0.254/24"));
+					if (cfg.route_auto_conf) {
+						r1.getRoutingTable().add(Ip4Prefix.ANY,new Ip4Address("10.0.0.254"));
+						for (int i=1; i<=cfg.num_nets; i++) {
+							if (i!=k) r1.getRoutingTable().add(new Ip4Prefix("10."+i+".0.0/16"),new Ip4Address("10.0.0."+i));
+						}
+						for (int i=1; i<=cfg.num_access_nets; i++) {
+							r1.getRoutingTable().add(new Ip4Prefix("10."+k+"."+i+".0/24"),new Ip4Address("10."+k+".0."+i));
+						}
+					}
+				}
+			}
+			r1.startTelnetServer(auth_db0);
+			network.addNode(r1);
+			// host level 2
+			for (int j=1; j<=cfg.num_servers; j++) {
+				Ip4Host h1=new Ip4Host(new LinkInterface<>(link1,new Ip4AddressPrefix("10."+k+".0."+(cfg.num_access_nets+j)+"/24")),new Ip4Address("10."+k+".0.254"));
+				h1.startTelnetServer(auth_db0);
+				h1.startHttpServer();
+				network.addNode(h1);				
+			}
+			// router level 2
+			for (int j=1; j<=cfg.num_access_nets; j++) {
+				Link<Ip4Address,Ip4Packet> link2=new Link<>();
+				Links.putLink("link-"+k+"."+j,link2);
+				Ip4Router r2=new Ip4Router(new Ip4Address(cfg.loopback_addr_prefix+k+'.'+j));
+				if (cfg.ni_auto_conf) {
+					NetInterface<Ip4Address,Ip4Packet> ni21=new LinkInterface<>(link1);
+					NetInterface<Ip4Address,Ip4Packet> ni22=new LinkInterface<>(link2);
+					r2.addNetInterface(ni21);
+					r2.addNetInterface(ni22);
+					if (cfg.addr_auto_conf) {
+						r2.addAddress(ni21,new Ip4AddressPrefix("10."+k+".0."+j+"/24"));
+						r2.addAddress(ni22,new Ip4AddressPrefix("10."+k+"."+j+".254/24"));						
+						if (cfg.route_auto_conf) {
+							r2.getRoutingTable().add(Ip4Prefix.ANY,new Ip4Address("10."+k+".0.254"));
+							for (int i=1; i<=cfg.num_access_nets; i++) {
+								if (i!=j) r2.getRoutingTable().add(new Ip4Prefix("10."+k+"."+i+".0/24"),new Ip4Address("10."+k+".0."+i));
+							}
+						}					
+					}
+				}
+				r2.startTelnetServer(auth_db0);
+				network.addNode(r2);
+				// host level 3
+				for (int i=1; i<=cfg.num_hosts; i++) {
+					Ip4Host h2=new Ip4Host(new LinkInterface<>(link2,new Ip4AddressPrefix("10."+k+"."+j+"."+i+"/24")),new Ip4Address("10."+k+"."+j+".254"));
+					h2.startTelnetServer(auth_db0);
+					h2.startHttpServer();
+					network.addNode(h2);
+				}
+			}
+		}
+	}
+	
+	
+	public static Network<Ip4Node,Link<Ip4Address,Ip4Packet>> getInstance(ConfigNetworkInfo network_info, HashMap<String,String> auth_db) {
+		Network<Ip4Node,Link<Ip4Address,Ip4Packet>> network=new Network<Ip4Node,Link<Ip4Address,Ip4Packet>>() {
+			ConfigNetworkInfo last_network_info=network_info;
+			HashMap<String,String> saved_auth_db=auth_db;
+			@Override
+			public void rebuild(String cfg) {
+				if (cfg!=null) {
+					ConfigNetworkInfo aux=JsonUtils.fromJson(cfg,ConfigNetworkInfo.class);
+					if (aux.nodes!=null) last_network_info=aux;
+				}
+				clear();
+				build(this,last_network_info,saved_auth_db);
+			}
+			@Override
+			public void clear() {
+				super.clear();
+				Links.prune();
+			}
+		};
+		build(network,network_info,auth_db);
+		return network;
+	}
+
+	private static void build(Network<Ip4Node,Link<Ip4Address,Ip4Packet>> network, ConfigNetworkInfo network_info, HashMap<String,String> auth_db) {
+		for (ConfigNodeInfo node_info: network_info.nodes) {
+			// node
+			Ip4Host node=new Ip4Host();
+			node.setName(node_info.label);
+			// interfaces
+			HashMap<String,NetInterface<Ip4Address,Ip4Packet>> interfaces=new HashMap<>();
+			for (ConfigInterfaceInfo ni_info: node_info.interfaces) {
+				NetInterface<Ip4Address,Ip4Packet> ni=null;
+				ArrayList<Ip4AddressPrefix> ipaddrs=new ArrayList<>();
+				for (String a: ni_info.addresses) if (a.indexOf('/')>0) ipaddrs.add(new Ip4AddressPrefix(a));
+				if (ni_info.type.startsWith("LinkInterface")) {
+					//String link_name=ni_info.type.substring(ni_info.type.indexOf('/')+1).substring("name=".length()).split("\"")[1];
+					String link_name=ni_info.type.substring(ni_info.type.indexOf('/')+1);
+					//System.out.println("DEBUG: TestNetworkFactory: build(): LinkInterface: "+link_name);
+					Link<Ip4Address,Ip4Packet> link=Links.getLink(link_name);
+					if (network.getLink(ni_info.type)==null) network.addLink(ni_info.type,link);
+					ni=new LinkInterface<>(link);
+				}
+				else if (ni_info.type.startsWith("Ip4TuntapInterface")) {
+					String[] params=ni_info.type.substring(ni_info.type.indexOf('/')+1).split(",");
+					//System.out.println("DEBUG: TestNetworkFactory: build(): Ip4TuntapInterface: params: "+Arrays.toString(params));
+					TuntapSocket.Type type=params[0].equals("TUN")?TuntapSocket.Type.TUN:TuntapSocket.Type.TAP;
+					String dev_name=params[1];
+					String dev_file=params[2].equals("null")?null:params[2];
+					EthAddress eth_addr=params[3].equals("null")?null:new EthAddress(params[3]);
+					try {
+						ni=new Ip4TuntapInterface(type,dev_name,dev_file,eth_addr,ipaddrs.get(0));
+						ipaddrs.remove(0);
+					}
+					catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (ni!=null) {
+					for (int i=0; i<ipaddrs.size(); i++) ni.addAddress(ipaddrs.get(i));			
+					ni.setName(ni_info.name);
+					node.addNetInterface(ni);
+					interfaces.put(ni_info.name,ni);
+				}
+			}
+			// rt
+			RoutingTable<Ip4Address, Ip4Packet> rt=node.getRoutingTable();
+			for (RouteInfo route_info: node_info.rt) {
+				if (route_info.dest.equals("default")) rt.add(new Route<Ip4Address,Ip4Packet>(Ip4Prefix.ANY,new Ip4Address(route_info.nexthop),interfaces.get(route_info.ni)));
+				else {
+					Ip4Address dest=route_info.dest.indexOf('/')>0? new Ip4Prefix(route_info.dest) : new Ip4Address(route_info.dest);
+					if (!route_info.nexthop.equals("none")) rt.add(new Route<Ip4Address,Ip4Packet>(dest,new Ip4Address(route_info.nexthop),interfaces.get(route_info.ni)));
+				}
+			}
+			// forwarding
+			node.setForwarding(node_info.forwarding);	
+			network.addNode(node);
+			// services
+			for (String srv: node_info.services) {
+				if (srv.equals("telnet")) node.startTelnetServer(auth_db);
+				if (srv.equals("http")) node.startHttpServer();
+			}
+		}		
+	}
+
+	
+}

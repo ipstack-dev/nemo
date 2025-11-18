@@ -1,0 +1,314 @@
+body {
+  background-color: rgb(100, 182, 227);
+}
+
+#background {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100px;
+  z-index: 2;
+}
+
+#nemo001
+{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 90px;
+  height: 20px;
+  padding: 5px;
+  background-color: white;
+  border-style: solid;
+  border-width: thin;
+  border-radius: 10px;
+  border-color: gray;
+  z-index: 1;
+}
+
+#nemo002 {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  width: 140px;
+  height: 40px;
+  z-index: 3;
+}
+
+#home_botton{
+  position: fixed;
+  top: 25px;
+  right: 20px;
+  weight: 50px;
+  height: 50px;
+  z-index: 3;
+}
+
+#reload {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  border-style: solid;
+  border-width: thin;
+  border-radius: 5px;
+  border-color: rgb(40, 40, 40);
+  z-index: 3;
+}
+
+#net_container {
+  position: relative;
+  top: 120px;
+  left: 300px;
+  background-color: rgb(250, 250, 250);
+  border: 1px solid gray;
+  height: 85%;
+  width: 80%;
+  z-index: 0;
+}
+
+#visJS_settings
+{
+  position: absolute;
+  top: 160px;
+  left: 15px;
+  z-index: 3;
+}
+
+#networkTest
+{
+  position: absolute;
+  top: 300px;
+  left: 15px;
+  z-index: 3;
+}
+
+#networkInfo
+{
+  position: absolute;
+  top: 400px;
+  left: 15px;
+  z-index: 3;
+}
+
+#node
+{
+  position: absolute;
+  top: 150px;
+  left: 30px;
+  font-size: 20px;
+  z-index: 1;
+}
+
+#current_node {
+  font-size: 15px;
+  z-index: 3;
+}
+
+#data2 {
+  margin: 10px;
+  font-size: 15px;
+}
+
+#data1{
+  background-color: rgb(240, 240, 240);
+  position: absolute;
+  top: 185px;
+  left: 30px;
+  z-index: 1;
+  border-style: solid;
+  border-width: thin;
+  padding: 5px;
+}
+
+#ip_dest {
+  width: 100px;
+}
+
+#operation {
+  font-size: 28px;
+}
+
+#node-popUp {
+  display: none;
+  position: absolute;
+  top: 350px;
+  left: 170px;
+  z-index: 299;
+  width: 250px;
+  height: 120px;
+  background-color: #f9f9f9;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #5394ed;
+  padding: 10px;
+  text-align: center;
+}
+
+#edge-popUp {
+  display: none;
+  position: absolute;
+  top: 350px;
+  left: 170px;
+  z-index: 299;
+  width: 250px;
+  height: 90px;
+  background-color: #f9f9f9;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #5394ed;
+  padding: 10px;
+  text-align: center;
+}
+
+#data_container
+{
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  margin-left: -300px;
+  width: 600px;
+}
+
+#ping_result
+{
+  position: absolute;
+  top: 250px;
+  width: 600px;
+  height: 200px;
+  background-color: rgb(240, 240, 240);
+  border-style: solid;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+#canvas
+{
+  position: absolute;
+  top: 0px;
+  background-color: rgb(240, 240, 240);
+  border-style: solid;
+  border-width: 3px;
+}
+
+#stop_buttton
+{
+  position: absolute;
+  top: 500px;
+  left: 10px;
+  width: 80px;
+}
+
+#resume_buttton{
+  position: absolute;
+  top: 500px;
+  left: 120px;
+  width: 80px;
+}
+
+#node_label
+{
+  position: absolute;
+  top: 80px;
+}
+
+#ping_form
+{
+  background-color: rgb(240, 240, 240);
+  text-align: center;
+  padding-top: 100px;
+  padding-bottom: 80px;
+  border-style: solid;
+  width: 400px;
+}
+
+h1{
+  color: rgb(19, 92, 132);
+  font-family: "Optima", sans-serif;
+  font-size: 50px;
+  position: fixed;
+  top: -15px;
+  z-index: 299;
+  padding-left: 25px;
+}
+
+label {
+  font-size: 15px;
+}
+
+button{
+  background-color: rgb(30, 150, 190);
+  border-radius: 5px;
+}
+
+input[type=button] {
+  background-color: rgb(30, 150, 190);
+  border-radius: 5px;
+}
+
+input[type=text] {
+  background-color: rgb(250, 250, 250);
+  border-width: thin;
+  border-radius: 3px;
+}
+
+select {
+  background-color: rgb(250, 250, 250);
+}
+
+.table_content
+{
+  width: 80px;
+  text-align: center;
+}
+
+.table_description
+{
+  width: 100px;
+}
+
+.test_container
+{
+  position: absolute;
+  left: 600px;
+  top: 100px;
+}
+
+.ping_form_container
+{
+  position: relative;
+  top: 25%;
+  display: flex;
+  justify-content: center;
+}
+
+LargeSpace
+{
+  padding-left: 80px;
+}
+
+body, select
+{
+  font: 10pt sans;
+}
+
+table.legend_table
+{
+  background-color: rgb(240, 240, 240);
+  font-size: 11px;
+  border-width: 1px;
+  border-color: #d3d3d3;
+  border-style: solid;
+}
+
+table.legend_table, td
+{
+  background-color: rgb(240, 240, 240);
+  border-width: 1px;
+  border-color: gray;
+  border-style: solid;
+  padding: 2px;
+}

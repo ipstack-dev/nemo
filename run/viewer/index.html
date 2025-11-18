@@ -1,0 +1,248 @@
+<html>
+
+	<head>
+		<script type="text/javascript" src="vis-network.min.js"></script>
+	</head>
+
+	<body>
+		<div id="test-network"></div>
+
+		<script type="text/javascript">
+
+			function Get(yourUrl){
+					var Httpreq = new XMLHttpRequest(); // a new request
+					Httpreq.open("GET",yourUrl,false);
+					Httpreq.send(null);
+					return Httpreq.responseText;
+			}
+
+			var txtSimpleGraph = Get("http://127.0.0.1:3999/network/simple");
+
+			var obj = JSON.parse(txtSimpleGraph);
+			var nodesData = [];
+			var edgesData = [];
+			var editEnabled = false;
+
+			var responseText = "";
+
+			//Inizio traduzione NEMO JSON DATA to VISJS DATA Grafo Semplice
+
+			for (var key in obj.nodes) {
+				var value = obj.nodes[key];
+				if (value.type == "host")
+				nodesData.push({
+					id: value.id,
+					label: value.label,
+					shape: "square"
+				});
+				else if (value.type == "link")
+				nodesData.push({
+					id: value.id,
+					label: value.label,
+					shape: "ellipse"
+				});
+				else if (value.type == "router")
+				nodesData.push({
+					id: value.id,
+					label: value.label,
+					shape: "dot"
+				});
+			}
+
+			for (var key in obj.edges) { //Itero sui links
+				var value = obj.edges[key];
+				edgesData.push({
+					from: value.from,
+					to: value.to,
+					label: value.label,
+					font: { align: "top" }
+				});
+			}
+
+			//Fine traduzione NEMO JSON DATA to VISJS DATA Grafo Semplice
+
+			function httpGet(theUrl, htmlID) {
+				xmlhttp=new XMLHttpRequest();
+				xmlhttp.onreadystatechange=function() {
+					if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+						document.getElementById(htmlID).innerHTML = xmlhttp.responseText;
+					}
+				}
+				xmlhttp.open("GET", theUrl, false );
+				xmlhttp.send();
+			}
+
+			// create an array with nodes
+			var nodes = new vis.DataSet(nodesData);
+
+			// create an array with edges
+			var edges = new vis.DataSet(edgesData);
+
+			// create a network
+			var container = document.getElementById("test-network");
+
+			var data = {
+				nodes: nodes,
+				edges: edges
+			};
+
+			var options = {
+				manipulation: {
+					enabled: editEnabled,
+					addNode: function(data, callback) {
+						// filling in the popup DOM elements
+						document.getElementById("node-operation").innerHTML = "Add Node";
+						editNode(data, clearNodePopUp, callback);
+					},
+					editNode: function(data, callback) {
+						// filling in the popup DOM elements
+						document.getElementById("node-operation").innerHTML = "Edit Node";
+						editNode(data, cancelNodeEdit, callback);
+					},
+					addEdge: function(data, callback) {
+						if (data.from == data.to) {
+							var r = confirm("Do you want to connect the node to itself?");
+							if (r != true) {
+								callback(null);
+								return;
+							}
+						}
+						document.getElementById("edge-operation").innerHTML = "Add Edge";
+						editEdgeWithoutDrag(data, callback);
+					},
+					editEdge: {
+						editWithoutDrag: function(data, callback) {
+							document.getElementById("edge-operation").innerHTML = "Edit Edge";
+							editEdgeWithoutDrag(data, callback);
+						}
+					}
+				},
+			};
+
+			var network = new vis.Network(container, data, options);
+			
+			network.stabilize(10000);
+			createSelectIpList();
+			
+			//Inizio funzioni manipolazione nodi
+			function editNode(data, cancelAction, callback) {
+				document.getElementById("node-id").value = data.id;
+				document.getElementById("node-label").value = data.label;
+				document.getElementById("node-saveButton").onclick = saveNodeData.bind(this, data, callback);
+				document.getElementById("node-cancelButton").onclick = cancelAction.bind(this, callback);
+				document.getElementById("node-popUp").style.display = "block";
+			}
+
+			// Callback passed as parameter is ignored
+			function clearNodePopUp() {
+				document.getElementById("node-saveButton").onclick = null;
+				document.getElementById("node-cancelButton").onclick = null;
+				document.getElementById("node-popUp").style.display = "none";
+			}
+
+			function cancelNodeEdit(callback) {
+				clearNodePopUp();
+				callback(null);
+			}
+
+			function saveNodeData(data, callback) {
+				data.id = document.getElementById("node-id").value;
+				data.label = document.getElementById("node-label").value;
+				clearNodePopUp();
+				callback(data);
+
+				createSelectIpList();
+			}
+
+			function editEdgeWithoutDrag(data, callback) {
+				// filling in the popup DOM elements
+				document.getElementById("edge-label").value = data.label;
+				document.getElementById("edge-saveButton").onclick = saveEdgeData.bind(this, data, callback);
+				document.getElementById("edge-cancelButton").onclick = cancelEdgeEdit.bind( this, callback);
+				document.getElementById("edge-popUp").style.display = "block";
+			}
+
+			function clearEdgePopUp() {
+				document.getElementById("edge-saveButton").onclick = null;
+				document.getElementById("edge-cancelButton").onclick = null;
+				document.getElementById("edge-popUp").style.display = "none";
+			}
+
+			function cancelEdgeEdit(callback) {
+				clearEdgePopUp();
+				callback(null);
+			}
+
+			function saveEdgeData(data, callback) {
+				if (typeof data.to === "object") data.to = data.to.id;
+				if (typeof data.from === "object") data.from = data.from.id;
+				data.label = document.getElementById("edge-label").value;
+				clearEdgePopUp();
+				callback(data);
+			}
+			//Fine funzioni manipolazione nodi
+
+			function setEditMode() {
+				console.log(nodes);
+				editEnabled = !editEnabled;
+				network.setOptions({
+					manipulation: {enabled: editEnabled}
+				});
+			}
+
+			function exportToJSON() {
+				var nodesToExport = [];
+				var linksToExport = [];
+				var nodeIDs = nodes.getIds();
+
+				for(var i in nodeIDs) { //Itero i Node IDs
+					var tmpLinks = [];
+					var connectedEdgesId = network.getConnectedEdges(nodeIDs[i]);
+
+					for(var j in connectedEdgesId) { //Itero gli Edge IDs collegati al nodo
+						if (!tmpLinks.includes(edges.get(connectedEdgesId[j]).label))
+							tmpLinks.push(edges.get(connectedEdgesId[j]).label);
+						if (!linksToExport.includes(edges.get(connectedEdgesId[j]).label))
+							linksToExport.push(edges.get(connectedEdgesId[j]).label);
+					}
+					nodesToExport.push({id: nodeIDs[i], links: tmpLinks});
+				}
+				var outputObject = {nodes: nodesToExport, links: linksToExport};
+				var outputJSON = JSON.stringify(outputObject, undefined, 2);
+				console.log(outputJSON);
+			}
+
+			function createSelectIpList() {
+				var sel = document.getElementById("IpListSelect");
+				var nodeIDs = nodes.getIds();
+
+				for(var i in nodeIDs) {
+					var opt = document.createElement("option");
+					opt.text = nodes.get(nodeIDs[i]).label;
+					opt.value = "http://127.0.0.1:3999/node/".concat(nodes.get(nodeIDs[i]).label);
+					var link_check = opt.value.substring(30, 31);
+					if(link_check != "l") {
+						sel.options.add(opt, 1);
+					}
+				}
+			}
+
+			function share_rt(url) {
+				var url_rt = url.concat("/rt");
+				var queryString = "?" + url_rt;
+				window.location.href = "routing_tables.html" + queryString;
+			}
+
+			function share_ni(url) {
+				var url_ni = url.concat("/ni");
+				var queryString = "?" + url_ni;
+				window.location.href = "network_interfaces.html" + queryString;
+			}
+
+			function ping() {
+				window.location.href = "connection_test.html";
+			}
+
+		</script>
+	</body>
+</html>

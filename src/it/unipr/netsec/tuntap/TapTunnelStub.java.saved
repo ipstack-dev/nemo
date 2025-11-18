@@ -1,0 +1,163 @@
+package it.unipr.netsec.tuntap;
+
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.DatagramPacket;
+
+import org.zoolu.util.LoggerLevel;
+import org.zoolu.util.SystemUtils;
+
+import it.unipr.netsec.ipstack.ethernet.EthPacket;
+import it.unipr.netsec.ipstack.ip4.Ip4Address;
+import it.unipr.netsec.ipstack.ip4.SocketAddress;
+import it.unipr.netsec.ipstack.link.EthTunnelHub;
+import it.unipr.netsec.ipstack.link.EthTunnelInterface;
+import it.unipr.netsec.ipstack.socket.DatagramSocket;
+import it.unipr.netsec.ipstack.socket.JavanetDatagramSocket;
+import it.unipr.netsec.ipstack.util.PacketUtils;
+
+
+/** Stub for attaching a TAP interface to an {@link EthTunnelHub}.
+ */
+public class TapTunnelStub {
+
+	/** Debug mode */
+	public static boolean DEBUG=false;
+
+	/** Prints a debug message. */
+	private void debug(String str) {
+		SystemUtils.log(LoggerLevel.DEBUG,getClass(),str);
+	}
+
+	
+	/** Buffer size */
+	private static int BUFFER_SIZE=EthPacket.MAXIMUM_PAYLOAD_SIZE+18; // MTU + 14B ETH-HDR + 4B IEEE802.1Q-TAG
+	
+	/** Sender buffer */
+	private byte[] send_buffer=new byte[BUFFER_SIZE];
+
+	/** Receiver buffer */
+	private byte[] recv_buffer=new byte[BUFFER_SIZE];
+
+	/** TAP socket */
+	TuntapSocket tap;
+	
+	/** Local UDP socket */
+	DatagramSocket socket=null;
+	
+	/** Remote UDP end-point */
+	SocketAddress remote_soaddr;
+
+	/** Whether it is running */
+	boolean is_running=true;
+
+	
+	/** Creates a new TAP link.
+	 * @param name name of the TAP interface
+	 * @param local_port UDP port for the local tunnel end-point
+	 * @param remote_soaddr remote tunnel end-point 
+	 * @throws IOException */
+	public TapTunnelStub(String name, int local_port, SocketAddress remote_soaddr) throws IOException {
+		tap=new TuntapSocket(TuntapSocket.Type.TAP,name);
+		try {
+			Field provider=java.net.DatagramSocket.class.getField("PROVIDER"); // throws an exception in case of standard DatagramSocket
+			socket=new it.unipr.netsec.rawsocket.udp.DatagramSocket(local_port);
+			if (DEBUG) debug("DatagramSocket impllementation: "+provider.get(null).toString());
+		}
+		catch (Exception e) {
+			socket=new JavanetDatagramSocket(local_port);
+			if (DEBUG) debug("DatagramSocket impl: standard");
+		}		
+		this.remote_soaddr=remote_soaddr;
+		receiverTUNNEL();
+		receiverTAP();
+	}
+
+	
+	private void receiverTUNNEL() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				DatagramPacket datagram=new DatagramPacket(new byte[BUFFER_SIZE],BUFFER_SIZE);
+				try {
+					while (is_running) {
+						socket.receive(datagram);
+						EthPacket eth_pkt=EthPacket.parseEthPacket(datagram.getData(),datagram.getOffset(),datagram.getLength());
+						if (DEBUG) debug("run(): packet received: "+PacketUtils.toString(eth_pkt));
+						if (remote_soaddr==null) {
+							remote_soaddr=new SocketAddress(new Ip4Address(datagram.getAddress()),datagram.getPort());
+							if (DEBUG) debug("run(): remote-soaddr="+remote_soaddr);
+						}
+						if (eth_pkt.getType()==EthTunnelInterface.PING_TYPE) {
+							if (DEBUG) debug("run(): ping received");
+							continue;
+						}
+						synchronized (send_buffer) {
+							int len=eth_pkt.getBytes(send_buffer,0);
+							try {
+								tap.send(send_buffer,0,len);
+							}
+							catch (IOException e) {
+								if (DEBUG) debug(e.toString());
+							}
+						}
+					}
+				}
+				catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}).start();
+		// PING
+		if (remote_soaddr!=null) ping();
+	}
+
+	
+	private void receiverTAP() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (is_running) {
+					try {				
+						int len=tap.receive(recv_buffer,0);
+						if (is_running) {
+							EthPacket eth_pkt=EthPacket.parseEthPacket(recv_buffer,0,len);
+							if (DEBUG) debug("receiver(): packet: "+PacketUtils.toString(eth_pkt));				
+							if (remote_soaddr==null){
+								if (DEBUG) debug("send(): no remote end-point address: packet discarded");
+								return;
+							}
+							byte[] data=eth_pkt.getBytes();
+							DatagramPacket datagram=new DatagramPacket(data,data.length,remote_soaddr.getIpAddress().toInetAddress(),remote_soaddr.getPort());
+							try {
+								socket.send(datagram);
+							}
+							catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+					catch (IOException e) {
+						if (DEBUG) debug(e.toString());
+					}
+				}
+			}
+		}).start();
+	}
+
+	
+	/** Sends a ping packet to a remote end-point (typically for create an association). */
+	public void ping() {
+		if (DEBUG) debug("ping(): "+remote_soaddr);
+		DatagramPacket datagram=new DatagramPacket(EthTunnelInterface.PING,EthTunnelInterface.PING.length,remote_soaddr.getIpAddress().toInetAddress(),remote_soaddr.getPort());
+		try {
+			socket.send(datagram);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+}

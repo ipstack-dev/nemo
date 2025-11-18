@@ -1,0 +1,102 @@
+package it.unipr.netsec.ipstack.socket;
+
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.SocketAddress;
+import java.net.SocketException;
+
+
+/** Single datagram socket API for different UDP socket implementations.
+ * I actually wraps two socket implementations: {@link it.unipr.netsec.ipstack.tcp.Socket} and {@link java.net.Socket javanet_socket}.
+ */
+public class DatagramSocketImpl implements DatagramSocket {
+
+	
+	/** Java.net datagram socket */
+	java.net.DatagramSocket javanet_datagram_socket=null;
+
+	/** Other datagram socket */
+	it.unipr.netsec.ipstack.socket.DatagramSocket datagram_socket=null;
+
+	
+	/** Creates a new socket. */
+	public DatagramSocketImpl(java.net.DatagramSocket javanet_datagram_socket) throws SocketException {
+		this.javanet_datagram_socket=javanet_datagram_socket;
+	}
+	
+	/** Creates a new socket. */
+	public DatagramSocketImpl(it.unipr.netsec.ipstack.socket.DatagramSocket datagram_socket) throws SocketException {
+		this.datagram_socket=datagram_socket;
+	}
+	
+	/** Gets the UDP layer.
+	 * @return the UDP layer, in case of {@link it.unipr.netsec.ipstack.udp.DatagramSocket ipstack datagram socket}, or <i>null</i>. */
+	public it.unipr.netsec.ipstack.udp.UdpLayer getUdpLayer() {
+		return (datagram_socket!=null && datagram_socket instanceof it.unipr.netsec.ipstack.udp.DatagramSocket)? ((it.unipr.netsec.ipstack.udp.DatagramSocket)datagram_socket).getUdpLayer() : null; 
+	}
+
+	
+	@Override
+	public InetAddress getInetAddress() {
+		return javanet_datagram_socket!=null? javanet_datagram_socket.getInetAddress() : datagram_socket.getInetAddress();
+	}
+
+	@Override
+	public InetAddress getLocalAddress() {
+		return javanet_datagram_socket!=null? javanet_datagram_socket.getLocalAddress() : datagram_socket.getLocalAddress();
+	}
+
+	@Override
+	public int getPort() {
+		return javanet_datagram_socket!=null? javanet_datagram_socket.getPort(): datagram_socket.getPort();
+	}
+
+	@Override
+	public int getLocalPort() {
+		return javanet_datagram_socket!=null? javanet_datagram_socket.getLocalPort(): datagram_socket.getLocalPort();
+	}
+
+	@Override
+	public SocketAddress getRemoteSocketAddress() {
+		return javanet_datagram_socket!=null? javanet_datagram_socket.getRemoteSocketAddress(): datagram_socket.getRemoteSocketAddress();
+	}
+
+	@Override
+	public SocketAddress getLocalSocketAddress() {
+		return javanet_datagram_socket!=null? javanet_datagram_socket.getLocalSocketAddress(): datagram_socket.getLocalSocketAddress();
+	}
+	
+	@Override
+	public void send(DatagramPacket p) throws IOException {
+		if (javanet_datagram_socket!=null) javanet_datagram_socket.send(p); else datagram_socket.send(p);
+	}
+
+	@Override
+	public void receive(DatagramPacket p) throws IOException {
+		if (javanet_datagram_socket!=null) javanet_datagram_socket.receive(p); else datagram_socket.receive(p);
+	}
+
+	@Override
+	public void close() {
+		if (javanet_datagram_socket!=null) javanet_datagram_socket.close(); else datagram_socket.close();
+	}
+	
+	@Override
+	public boolean isClosed() {
+		return javanet_datagram_socket!=null? javanet_datagram_socket.isClosed() : datagram_socket.isClosed();
+	}
+	
+	@Override
+	public void setSoTimeout(int timeout) throws SocketException {
+		if (javanet_datagram_socket!=null) javanet_datagram_socket.setSoTimeout(timeout); else datagram_socket.setSoTimeout(timeout);
+	}
+	
+	@Override
+	public int getSoTimeout() throws SocketException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

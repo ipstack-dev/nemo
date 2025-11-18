@@ -1,0 +1,38 @@
+package test.nemo.mngnetwork;
+
+
+import java.io.IOException;
+
+import it.unipr.netsec.ipstack.ethernet.EthAddress;
+import it.unipr.netsec.ipstack.ip4.Ip4Address;
+import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
+import it.unipr.netsec.ipstack.ip4.Ip4Packet;
+import it.unipr.netsec.ipstack.net.NetInterface;
+import it.unipr.netsec.tuntap.Ip4TuntapInterface;
+import it.unipr.netsec.tuntap.TuntapSocket;
+
+
+public class TuntapInterfaceFactory {
+
+	TuntapSocket.Type type;
+	String dev_name;
+	String dev_file;
+	EthAddress eth_addr;
+	Ip4AddressPrefix ip_addr_prefix;
+	
+	Ip4TuntapInterface ni=null;
+	
+	
+	public TuntapInterfaceFactory(TuntapSocket.Type type, String dev_name, String dev_file, EthAddress eth_addr, Ip4AddressPrefix ip_addr_prefix) {
+		this.type=type;
+		this.dev_name=dev_name;
+		this.dev_file=dev_file;
+		this.eth_addr=eth_addr;
+		this.ip_addr_prefix=ip_addr_prefix;
+	}
+
+	public NetInterface<Ip4Address,Ip4Packet> getInstance() throws IOException {
+		return new Ip4TuntapInterface(type,dev_name,dev_file,eth_addr,ip_addr_prefix);
+	}
+
+}

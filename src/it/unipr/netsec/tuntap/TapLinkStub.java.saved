@@ -1,0 +1,95 @@
+package it.unipr.netsec.tuntap;
+
+
+import java.io.IOException;
+
+import org.zoolu.util.LoggerLevel;
+import org.zoolu.util.SystemUtils;
+
+import it.unipr.netsec.ipstack.ethernet.EthAddress;
+import it.unipr.netsec.ipstack.ethernet.EthPacket;
+import it.unipr.netsec.ipstack.link.Link;
+import it.unipr.netsec.ipstack.link.LinkInterface;
+import it.unipr.netsec.ipstack.util.PacketUtils;
+
+
+/** Stub for attaching a TAP interface to an Ethernet {@link Link}.
+ */
+public class TapLinkStub extends LinkInterface<EthAddress,EthPacket> {
+
+	/** Debug mode */
+	public static boolean DEBUG=false;
+
+	/** Prints a debug message. */
+	private void debug(String str) {
+		SystemUtils.log(LoggerLevel.DEBUG,getClass(),str);
+	}
+
+	
+	/** Buffer size */
+	private static int BUFFER_SIZE=EthPacket.MAXIMUM_PAYLOAD_SIZE+18; // MTU + 14B ETH-HDR + 4B IEEE802.1Q-TAG
+	
+	/** Sender buffer */
+	private byte[] send_buffer=new byte[BUFFER_SIZE];
+
+	/** Receiver buffer */
+	private byte[] recv_buffer=new byte[BUFFER_SIZE];
+
+	/** TAP socket */
+	TuntapSocket tap;
+	
+	/** TAP interface */
+	LinkInterface<EthAddress,EthPacket> tap_ni;
+	
+	/** Whether it is running */
+	boolean is_running=true;
+
+	
+	/** Creates a new TAP link.
+	 * @param name name of the TAP interface
+	 * @throws IOException */
+	public TapLinkStub(String name, Link<EthAddress,EthPacket> link) throws IOException {
+		super(link);
+		tap=new TuntapSocket(TuntapSocket.Type.TAP,name);
+		new Thread() {
+			public void run() {
+				receiver();
+			}
+		}.start();
+	}
+	
+	
+	@Override
+	public void processIncomingPacket(Link<EthAddress,EthPacket> link, EthPacket pkt) {
+		synchronized (send_buffer) {
+			int len=pkt.getBytes(send_buffer,0);
+			try {
+				tap.send(send_buffer,0,len);
+			}
+			catch (IOException e) {
+				if (DEBUG) debug(e.toString());
+			}
+		}
+	}
+
+		
+	/** Receives packets. */
+	private void receiver() {
+		synchronized (recv_buffer) {
+			while (is_running) {
+				try {				
+					int len=tap.receive(recv_buffer,0);
+					if (is_running) {
+						EthPacket eth_pkt=EthPacket.parseEthPacket(recv_buffer,0,len);
+						if (DEBUG) debug("receiver(): packet: "+PacketUtils.toString(eth_pkt));
+						link.transmit(eth_pkt,this);
+					}
+				}
+				catch (IOException e) {
+					if (DEBUG) debug(e.toString());
+				}
+			}
+		}
+	}
+	
+}

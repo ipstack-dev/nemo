@@ -1,0 +1,43 @@
+package test.ipstack;
+
+
+import java.io.IOException;
+
+import org.zoolu.util.Flags;
+import org.zoolu.util.LoggerLevel;
+import org.zoolu.util.LoggerWriter;
+import org.zoolu.util.SystemUtils;
+
+import it.unipr.netsec.ipstack.ethernet.EthHub;
+import it.unipr.netsec.ipstack.ethernet.EthTunnelHub;
+import it.unipr.netsec.ipstack.ethernet.EthTunnelInterface;
+import it.unipr.netsec.ipstack.ip4.SocketAddress;
+import it.unipr.netsec.tuntap.TapInterface;
+
+
+/** Ethernet repeater connecting a TAP interface to a (possibly remote) virtual hub.
+ */
+public abstract class TapStub {
+
+	/** Main method. 
+	 * @throws IOException */
+	public static void main(String[] args) throws IOException {
+		Flags flags=new Flags(args);
+		int port=flags.getInteger("-p",-1,"<port>","local UDP port");
+		String hub_soaddr=flags.getString("-s","127.0.0.1:"+EthTunnelHub.DEFAULT_PORT,"soaddr","Tunnel Hub socket address");
+		String dev=flags.getString("-i",null,"dev","TAP interface");
+		boolean verbose=flags.getBoolean("-v","verbose mode");
+		boolean help=flags.getBoolean("-h","prints this help");
+		if (help) {
+			System.out.println(flags.toUsageString(TapStub.class.getSimpleName()));
+			System.exit(0);
+		}
+		// else
+		if (verbose) {
+			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			EthHub.VERBOSE=true;
+		}
+		new EthHub(new TapInterface(dev,null),new EthTunnelInterface(port,new SocketAddress(hub_soaddr),null));
+	}
+
+}
