@@ -1,8 +1,8 @@
 package it.unipr.netsec.nemo.link;
 
 
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.Packet;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.Packet;
 
 
 /** Single method interface for getting the packet delay.

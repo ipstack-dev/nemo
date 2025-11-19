@@ -3,7 +3,7 @@ package it.unipr.netsec.nemo.program;
 
 import java.io.PrintStream;
 
-import it.unipr.netsec.ipstack.stack.IpStack;
+import io.ipstack.net.stack.IpStack;
 
 
 /** <i>top</i> command.

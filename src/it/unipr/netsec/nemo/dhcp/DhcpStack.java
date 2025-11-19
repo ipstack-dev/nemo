@@ -1,10 +1,9 @@
 package it.unipr.netsec.nemo.dhcp;
 
-
 import org.zoolu.util.Parser;
-import org.zoolu.util.SystemUtils;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -275,8 +274,8 @@ public class DhcpStack {
 			}
 		}
 		
-		if (log_file.equals("standard")) SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
-		else SystemUtils.setDefaultLogger(new LoggerWriter(log_path+"//"+log_file,LoggerLevel.DEBUG));
+		if (log_file.equals("standard")) DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
+		else DefaultLogger.setLogger(new WriterLogger(log_path+"//"+log_file,LoggerLevel.DEBUG));
 
 		// load available_addresses array
 		available_addresses=new String[address_list.size()];
@@ -307,6 +306,6 @@ public class DhcpStack {
 	}
 	
 	private void printlog(String str, LoggerLevel level) {
-		SystemUtils.getDefaultLogger().log(level,getClass(),str);
+		DefaultLogger.log(level,getClass(),str);
 	}
 }

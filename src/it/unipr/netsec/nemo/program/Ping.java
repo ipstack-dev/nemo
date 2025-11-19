@@ -5,9 +5,9 @@ import java.io.PrintStream;
 
 import org.zoolu.util.Flags;
 
-import it.unipr.netsec.ipstack.icmp4.PingClient;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.stack.IpStack;
+import io.ipstack.net.icmp4.PingClient;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.stack.IpStack;
 
 
 /** <i>ping</i> command.

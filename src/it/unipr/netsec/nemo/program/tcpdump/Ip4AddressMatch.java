@@ -3,9 +3,9 @@ package it.unipr.netsec.nemo.program.tcpdump;
 
 import java.util.ArrayList;
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.net.Packet;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.packet.Packet;
 
 
 public class Ip4AddressMatch implements Match {

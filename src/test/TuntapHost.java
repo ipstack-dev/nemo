@@ -20,21 +20,23 @@
 package test;
 
 
-import it.unipr.netsec.nemo.http.HttpServer;
 import it.unipr.netsec.nemo.ip.Ip4Host;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.tuntap.Ip4TunInterface;
-import it.unipr.netsec.tuntap.Ip4TuntapInterface;
-import it.unipr.netsec.tuntap.TapInterface;
 
 import java.io.IOException;
 
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
 import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
+
+import io.ipstack.http.HttpServer;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.tuntap.Ip4TunInterface;
+import io.ipstack.net.tuntap.Ip4TuntapInterface;
+import io.ipstack.net.tuntap.TapInterface;
 
 
 /** Simple host with HTTP server, attached to a TUN interface.
@@ -57,7 +59,7 @@ public class TuntapHost {
 			System.exit(0);					
 		}
 		if (verbose) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			HttpServer.VERBOSE=true;
 			Ip4TunInterface.DEBUG=true;
 			TapInterface.DEBUG=true;

@@ -1,0 +1,12 @@
+package it.unipr.netsec.nemo.websocket;
+
+/** .
+ */
+@FunctionalInterface
+public interface WebSocketServerListener {
+	
+	/** When a new WebSocket is established.
+	 * @param ws the WebSocket */
+	public void handleWebsocket(WebSocket ws);
+	
+}

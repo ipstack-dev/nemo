@@ -22,11 +22,11 @@ package it.unipr.netsec.nemo.routing.ospf;
 
 import org.zoolu.util.Bytes;
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.Packet;
-import it.unipr.netsec.ipstack.util.Checksum;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.Packet;
+import io.ipstack.net.util.Checksum;
 
 
 /** OSPF packet.

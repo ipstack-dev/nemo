@@ -4,12 +4,12 @@ package it.unipr.netsec.nemo.dhcp;
 import java.io.InterruptedIOException;
 import java.net.DatagramSocket;
 
-import org.zoolu.util.Logger;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
 import org.zoolu.util.Timer;
 import org.zoolu.util.TimerListener;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.Logger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
 
 
 /** Class DhcpClient implements a simple DHCP or MHCP client. */
@@ -85,7 +85,7 @@ public class DhcpClient extends Thread implements TimerListener {
 		socket=udpsocket;
 		listener=c_listener;
 		state=S_INIT;
-		messagelog=new LoggerWriter(stack.log_path+"//client-"+stack.client_port+".log",LoggerLevel.INFO); 
+		messagelog=new WriterLogger(stack.log_path+"//client-"+stack.client_port+".log",LoggerLevel.INFO); 
   }
 
 	/** Sets the client listener */
@@ -435,10 +435,10 @@ public class DhcpClient extends Thread implements TimerListener {
 
 	/** Prints a log */
 	private void printlog(String str) {
-		SystemUtils.getDefaultLogger().log(LoggerLevel.INFO,getClass(),str);
+		DefaultLogger.log(LoggerLevel.INFO,getClass(),str);
 	}
 
-	/** Prints a messagelog */
+	/** Prints a message log */
 	private void printmessagelog(DhcpMessage msg) {
 		String str=msg.toString();
 		printlog(str);

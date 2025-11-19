@@ -30,7 +30,7 @@ import java.net.InetAddress;
 import org.zoolu.util.SystemUtils;
 
 
-/** UdpProvider provides an UDP send/receive service.
+/** It provides an UDP send/receive service.
   * On the receiver side it waits for UDP datagrams and passes them
   * to the UdpProviderListener.
   * <p> If the attribute <i>alive_time</i> has a non-zero value, the UdpProvider stops

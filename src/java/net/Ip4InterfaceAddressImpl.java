@@ -20,7 +20,7 @@
 package java.net;
 
 
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
 
 
 class Ip4InterfaceAddressImpl extends InterfaceAddress {

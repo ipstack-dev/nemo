@@ -3,8 +3,8 @@ package it.unipr.netsec.nemo.program;
 
 import java.io.PrintStream;
 
-import it.unipr.netsec.ipstack.stack.IpStack;
-import it.unipr.netsec.ipstack.stack.IpCommand;
+import io.ipstack.net.stack.IpCommand;
+import io.ipstack.net.stack.IpStack;
 
 
 /** <i>ip</i> command.

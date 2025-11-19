@@ -1,14 +1,13 @@
 package it.unipr.netsec.nemo.routing;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
-import it.unipr.netsec.ipstack.net.Address;
+import io.ipstack.net.packet.Address;
 import it.unipr.netsec.nemo.routing.graph.Edge;
 import it.unipr.netsec.nemo.routing.graph.Graph;
 import it.unipr.netsec.nemo.routing.graph.GraphUtils;
@@ -33,7 +32,7 @@ public class NetworkMap {
 	
 	/** Prints a debug message. */
 	private static void debug(String str) {
-		SystemUtils.log(LoggerLevel.DEBUG,NetworkMap.class,str);
+		DefaultLogger.log(LoggerLevel.DEBUG,NetworkMap.class,str);
 	}
 		
 	

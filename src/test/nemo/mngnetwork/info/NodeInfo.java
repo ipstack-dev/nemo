@@ -3,16 +3,16 @@ package test.nemo.mngnetwork.info;
 
 import java.util.ArrayList;
 
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ethernet.EthPacket;
-import it.unipr.netsec.ipstack.ethernet.EthTunnelInterface;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4EthInterface;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.SocketAddress;
-import it.unipr.netsec.ipstack.link.LinkInterface;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.stack.Links;
+import io.ipstack.net.ethernet.EthAddress;
+import io.ipstack.net.ethernet.EthPacket;
+import io.ipstack.net.ethernet.EthTunnelInterface;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4EthInterface;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.SocketAddress;
+import io.ipstack.net.link.LinkInterface;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.stack.Links;
 import it.unipr.netsec.nemo.ip.Ip4Node;
 import test.nemo.mngnetwork.UniqueID;
 

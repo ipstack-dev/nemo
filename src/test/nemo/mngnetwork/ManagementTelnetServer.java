@@ -7,10 +7,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.link.Link;
-import it.unipr.netsec.ipstack.util.IpAddressUtils;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.link.Link;
+import io.ipstack.net.socket.JavanetServerSocket;
+import io.ipstack.net.util.IpAddressUtils;
 import it.unipr.netsec.nemo.ip.Ip4Node;
 import it.unipr.netsec.nemo.link.Network;
 import it.unipr.netsec.nemo.telnet.Telnet;
@@ -33,7 +34,7 @@ public class ManagementTelnetServer {
 	
 	
 	/** Java.net socket server */
-	it.unipr.netsec.ipstack.socket.ServerSocket server=null;
+	io.ipstack.net.socket.ServerSocket server=null;
 	
 	/** Whether it is running */
 	boolean running=true;
@@ -59,7 +60,7 @@ public class ManagementTelnetServer {
 		}
 		final Map<String,String> passwd_map=passwd_db;
 
-		server=new it.unipr.netsec.ipstack.socket.ServerSocket(new java.net.ServerSocket(port));
+		server=new JavanetServerSocket(new java.net.ServerSocket(port));
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

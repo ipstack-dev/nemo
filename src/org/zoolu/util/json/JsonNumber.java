@@ -4,12 +4,22 @@ package org.zoolu.util.json;
 public class JsonNumber implements JsonValue {
 
 	double value;
+	boolean isFloat=false;
 
+	
 	/**
 	 * @param value
 	 */
 	public JsonNumber(double value) {
 		this.value=value;
+	}
+
+	/**
+	 * @param value
+	 */
+	public JsonNumber(float value) {
+		this.value=value;
+		isFloat=true;
 	}
 
 	/**
@@ -28,6 +38,6 @@ public class JsonNumber implements JsonValue {
 
 	@Override
 	public String toString() {
-		return isInteger()? String.valueOf((long)value) : String.valueOf(value);
+		return isInteger()? String.valueOf((long)value) : (isFloat?String.valueOf((float)value):String.valueOf(value));
 	}
 }

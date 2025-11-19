@@ -30,6 +30,8 @@ import java.util.Calendar;
   */
 public class DateFormat {
 	
+	/** Whether using UTC */
+	public static boolean UTC=true;
 
 	/** Months */
 	private static final String[] MONTHS={ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
@@ -91,7 +93,7 @@ public class DateFormat {
 		return formatDouble(nanosecs)+"ns";
 	}
 
-		
+	
 	/** Gets a "HH:mm:ss.SSS EEE dd MMM yyyy" representation of a date.
 	 * @return the formatted date */
 	public static String formatHHmmssSSSEEEddMMMyyyy(Date date) {
@@ -111,9 +113,7 @@ public class DateFormat {
 		
 		return time+"."+millisec+" "+weekday+" "+day+" "+month+" "+year;
 		*/
-		Calendar cal=Calendar.getInstance();
-		cal.setTime(date);
-		cal.add(Calendar.MILLISECOND,-cal.getTimeZone().getOffset(cal.getTimeInMillis()));
+		Calendar cal=toCalendar(date,UTC);
 		String weekday=WEEKDAYS[cal.get(Calendar.DAY_OF_WEEK)-1];
 		String month=MONTHS[cal.get(Calendar.MONTH)];
 		String year=Integer.toString(cal.get(Calendar.YEAR));
@@ -131,15 +131,13 @@ public class DateFormat {
 		
 		return hour+":"+min+":"+sec+"."+millisec+" "+weekday+" "+day+" "+month+" "+year;
 	}
-
+	
 	
 	/** Gets a "HH:mm:ss.SSS" representation of a date.
 	 * @param date the date to be formatted
 	 * @return the formatted date */
 	public static String formatHHmmssSSS(Date date) {
-		Calendar cal=Calendar.getInstance();
-		cal.setTime(date);
-		cal.add(Calendar.MILLISECOND,-cal.getTimeZone().getOffset(cal.getTimeInMillis()));
+		Calendar cal=toCalendar(date,UTC);
 		String hour=Integer.toString(cal.get(Calendar.HOUR_OF_DAY));
 		String min=Integer.toString(cal.get(Calendar.MINUTE));
 		String sec=Integer.toString(cal.get(Calendar.SECOND));
@@ -198,9 +196,7 @@ public class DateFormat {
 	}
 
 	private static String formatYyyyMMddHHmmssSSS(Date date, String T, boolean millis, boolean micros, String Z) {
-		Calendar cal=Calendar.getInstance();
-		cal.setTime(date);
-		cal.add(Calendar.MILLISECOND,-cal.getTimeZone().getOffset(cal.getTimeInMillis()));
+		Calendar cal=toCalendar(date,UTC);
 		//String weekday=WEEKDAYS[cal.get(Calendar.DAY_OF_WEEK)-1];
 		//String month=MONTHS[cal.get(Calendar.MONTH)];
 		String year=Integer.toString(cal.get(Calendar.YEAR));
@@ -238,9 +234,7 @@ public class DateFormat {
 		String year=str.substring(len-4,len);
 		return weekday+", "+day+" "+month+" "+year+" "+time+" GMT";
 		*/
-		Calendar cal=Calendar.getInstance();
-		cal.setTime(date);
-		cal.add(Calendar.MILLISECOND,-cal.getTimeZone().getOffset(cal.getTimeInMillis()));
+		Calendar cal=toCalendar(date,UTC);
 		String weekday=WEEKDAYS[cal.get(Calendar.DAY_OF_WEEK)-1];
 		String month=MONTHS[cal.get(Calendar.MONTH)];
 		String year=Integer.toString(cal.get(Calendar.YEAR));
@@ -286,6 +280,50 @@ public class DateFormat {
 		cal.set(Calendar.SECOND,sec);
 
 		return cal.getTime();
+	}
+	
+	
+	/** Parses a String for a "YYYY-MM-DDThh:mm:ss" formatted date.
+	 * @param str the string containing the formatted time
+	 * @return the date */
+	public static Date parseYYYYMMDDThhmmss(String str) {
+		//DateFormat df=new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss 'GMT'",Locale.US);
+		//return df.format(date);
+		Calendar cal=Calendar.getInstance();
+		String[] fields=str.split("[-T: ]+");
+		int year=Integer.parseInt(fields[0]);
+		int month=Integer.parseInt(fields[1]);
+		int day=Integer.parseInt(fields[2]);
+		int hour=Integer.parseInt(fields[3]);
+		int min=Integer.parseInt(fields[4]);
+		int sec=Integer.parseInt(fields[5]);		
+		cal.set(Calendar.YEAR,year);
+		cal.set(Calendar.MONTH,month-1);
+		cal.set(Calendar.DAY_OF_MONTH,day);
+		cal.set(Calendar.HOUR_OF_DAY,hour);
+		cal.set(Calendar.MINUTE,min);
+		cal.set(Calendar.SECOND,sec);
+		return cal.getTime();
+	}
+
+	
+	/** Converts a date to a calendar.
+	 * @param date the date to be converter
+	 * @return the calendar */
+	public static Calendar toCalendar(Date date) {
+		return toCalendar(date,false);
+	}
+	
+	
+	/** Converts a date to a calendar.
+	 * @param date the date to be converter
+	 * @param toUtc whether converting to UTC
+	 * @return the calendar */
+	public static Calendar toCalendar(Date date, boolean toUtc) {
+		Calendar cal=Calendar.getInstance();
+		cal.setTime(date);
+		if (toUtc) cal.add(Calendar.MILLISECOND,-cal.getTimeZone().getOffset(cal.getTimeInMillis()));
+		return cal;
 	}
 
 }

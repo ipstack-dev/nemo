@@ -1,14 +1,13 @@
 package it.unipr.netsec.nemo.examples.p1;
 
-
 import org.zoolu.util.Clock;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
 
-import it.unipr.netsec.ipstack.link.Link;
-import it.unipr.netsec.ipstack.link.LinkInterface;
-import it.unipr.netsec.ipstack.net.Node;
+import io.ipstack.net.link.Link;
+import io.ipstack.net.link.LinkInterface;
+import io.ipstack.net.packet.Node;
 import it.unipr.netsec.nemo.link.DataLink;
 import it.unipr.netsec.nemo.link.DataLinkInterface;
 import it.unipr.netsec.simulator.scheduler.VirtualClock;
@@ -28,7 +27,7 @@ public class P1NetworkExample {
 		
 		// verbose mode
 		if (verbose) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			Node.DEBUG=true;
 			LinkInterface.DEBUG=true;
 			DataLinkInterface.DEBUG=true;

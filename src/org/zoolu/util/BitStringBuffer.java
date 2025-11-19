@@ -20,7 +20,6 @@
 
 package org.zoolu.util;
 
-
 import java.util.ArrayList;
 
 

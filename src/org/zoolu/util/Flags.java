@@ -131,8 +131,8 @@ public class Flags {
 	/** Parses the array of strings for a given value option, or parameter.
 	 * The option/parameter is removed from the list of unparsed strings.
 	 * @param tag option tag (e.g. '-a' or '--add'); use {@link #PARAM} or {@link #OPTIONAL_PARAM} to indicate that iti is a parameter without tag
-	 * @param param parameter string used to represent the value in the help string
-	 * @param description a description of this option/parameter for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param param parameter string used to represent the value in the help message
+	 * @param description a description of this option/parameter for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the value */
 	private String getValue(String tag, String param, String description) {
 		if (tag==null || tag==PARAM || tag==OPTIONAL_PARAM) {
@@ -161,10 +161,10 @@ public class Flags {
 
 	/** Parses the array of strings for a given tuple option.
 	 * The option is removed from the list of unparsed strings.
-	 * @param tag option tag; e.g. '-v' or '--values'
+	 * @param tag option tag, e.g. '-v' or '--values'
 	 * @param len the number of components of the tuple
-	 * @param param parameter string used to represent the parameter tuple in the help string
-	 * @param description a description of this option for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param param parameter string used to represent the parameter tuple in the help message
+	 * @param description a description of this option for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the tuple */
 	private String[] getTuple(String tag, int len, String param, String description) {
 		if (tag==null || tag==PARAM || tag==OPTIONAL_PARAM) throw new RuntimeException("tuple tag is missing; tuple can't be of type 'parameter'");
@@ -185,9 +185,9 @@ public class Flags {
 
 	/** Parses the array of strings for a given array option.
 	 * The option is removed from the list of unparsed strings.
-	 * @param tag option tag; e.g. '-v' or '--values'
-	 * @param param parameter string used to represent the parameter tuple in the help string
-	 * @param description a description of this option for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param tag option tag, e.g. '-v' or '--values'
+	 * @param param parameter string used to represent the parameter tuple in the help message
+	 * @param description a description of this option for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the tuple */
 	private String[] getArray(String tag, String param, String description) {
 		if (tag==null || tag==PARAM || tag==OPTIONAL_PARAM) throw new RuntimeException("tag is missing; array can't be of type 'parameter'");
@@ -211,8 +211,8 @@ public class Flags {
 	/** Parses the array of strings for all occurrences of given string option/parameter.
 	 * The option/parameter occurrences are removed from the list of unparsed strings.
 	 * @param tag option tag (e.g. '-a' or '--add')
-	 * @param param parameter string used to represent the value in the help string;
-	 * @param description a description of this option/parameter for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param param parameter string used to represent the value in the help message;
+	 * @param description a description of this option/parameter for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the string value */
 	/*private ArrayList<String> getAllOccurrences(String tag, String param, String description) {
 		if (tag==null || tag==PARAM || tag==OPTIONAL_PARAM) throw new RuntimeException("tag is missing; it can't be of type 'parameter'");
@@ -233,8 +233,8 @@ public class Flags {
 	 * The option/parameter is removed from the list of unparsed strings.
 	 * @param tag option tag (e.g. '-a' or '--add'); use {@link #PARAM} or {@link #OPTIONAL_PARAM} to indicate that it is a parameter without tag
 	 * @param default_value default value
-	 * @param param parameter string used to represent the value in the help string;
-	 * @param description a description of this option/parameter for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param param parameter string used to represent the value in the help message;
+	 * @param description a description of this option/parameter for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the string value */
 	public String getString(String tag, String default_value, String param, String description) {
 		String value=getValue(tag,param,description);
@@ -257,8 +257,8 @@ public class Flags {
 	 * The option/parameter is removed from the list of unparsed strings.
 	 * @param tag option tag (e.g. '-a' or '--add'); use {@link #PARAM} or {@link #OPTIONAL_PARAM} to indicate that it is a parameter without tag
 	 * @param default_value default value
-	 * @param param parameter string used to represent the value in the help string;
-	 * @param description a description of this option/parameter for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param param parameter string used to represent the value in the help message;
+	 * @param description a description of this option/parameter for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the long value */
 	public long getLong(String tag, long default_value, String param, String description) {
 		String value=getValue(tag,param,description);
@@ -269,8 +269,8 @@ public class Flags {
 	 * The option/parameter is removed from the list of unparsed strings.
 	 * @param tag option tag (e.g. '-a' or '--add'); use {@link #PARAM} or {@link #OPTIONAL_PARAM} to indicate that it is a parameter without tag
 	 * @param default_value default value
-	 * @param param parameter string used to represent the value in the help string;
-	 * @param description a description of this option/parameter for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param param parameter string used to represent the value in the help message;
+	 * @param description a description of this option/parameter for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the float value */
 	public float getFloat(String tag, float default_value, String param, String description) {
 		String value=getValue(tag,param,description);
@@ -281,8 +281,8 @@ public class Flags {
 	 * The option/parameter is removed from the list of unparsed strings.
 	 * @param tag option tag (e.g. '-a' or '--add'); use {@link #PARAM} or {@link #OPTIONAL_PARAM} to indicate that it is a parameter without tag
 	 * @param default_value default array
-	 * @param param parameter string used to represent the value in the help string
-	 * @param description a description of this option/parameter for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param param parameter string used to represent the value in the help message
+	 * @param description a description of this option/parameter for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the double value */
 	public double getDouble(String tag, double default_value, String param, String description) {
 		String value=getValue(tag,param,description);
@@ -294,8 +294,8 @@ public class Flags {
 	 * @param tag option tag (e.g. '-v' or '--values')
 	 * @param len the number of components of the tuple
 	 * @param default_value default value
-	 * @param param parameter string used to represent the value in the help string
-	 * @param description a description of this option for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param param parameter string used to represent the value in the help message
+	 * @param description a description of this option for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the string tuple */
 	public String[] getStringTuple(String tag, int len, String[] default_value, String param, String description) {
 		String[] tuple=getTuple(tag,len,param,description);
@@ -303,12 +303,12 @@ public class Flags {
 	}
 
 	/** Parses the array of strings for an array option, providing an array of values.
-	 * The option values are formed by the length of the of the array followed by the actual array values.
+	 * The option values are headed by the length of the of the array (e.g. -a 3 xxx yyy zzz).
 	 * The option is removed from the list of unparsed strings.
 	 * @param tag option tag (e.g. '-v' or '--values')
 	 * @param default_value default array
-	 * @param param parameter string used to represent the value in the help string
-	 * @param description a description of this option for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param param parameter string used to represent the value in the help message
+	 * @param description a description of this option for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the array of values */
 	public String[] getStringArray(String tag, String[] default_value, String param, String description) {
 		String[] values=getArray(tag,param,description);
@@ -319,8 +319,8 @@ public class Flags {
 	 * The option/parameter occurrences are removed from the list of unparsed strings.
 	 * @param tag option tag (e.g. '-a' or '--add')
 	 * @param default_value default value
-	 * @param param parameter string used to represent the value in the help string;
-	 * @param description a description of this option/parameter for the help string; if it is <i>null</i>, no description is added to the help string
+	 * @param param parameter string used to represent the value in the help message
+	 * @param description a description of this option/parameter for the help message; if it is <i>null</i>, no description is added to the help message
 	 * @return the string value */
 	/*public ArrayList<String> getAllStrings(String tag, String default_value, String param, String description) {
 		ArrayList<String> list=getAllOccurrences(tag,param,description);

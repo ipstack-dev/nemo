@@ -24,18 +24,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.zoolu.util.LoggerLevel;
 import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.LoggerLevel;
 
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6AddressPrefix;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.ip6.Ip6Prefix;
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.Packet;
-import it.unipr.netsec.ipstack.routing.Route;
-import it.unipr.netsec.ipstack.routing.RoutingTable;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6AddressPrefix;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.ip6.Ip6Prefix;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Packet;
+import io.ipstack.net.packet.Route;
+import io.ipstack.net.packet.RoutingTable;
 import it.unipr.netsec.nemo.routing.LinkStateInfo;
 import it.unipr.netsec.nemo.routing.RouteInfo;
 import it.unipr.netsec.nemo.routing.DynamicRouting;

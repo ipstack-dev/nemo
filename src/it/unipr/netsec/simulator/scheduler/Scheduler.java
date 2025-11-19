@@ -19,15 +19,13 @@
 
 package it.unipr.netsec.simulator.scheduler;
 
-
-
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.zoolu.util.Clock;
 import org.zoolu.util.DateFormat;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
 
 
@@ -44,7 +42,7 @@ public class Scheduler {
 
 	/** Prints a debug message. */
 	private static void debug(String str) {
-		SystemUtils.log(LoggerLevel.DEBUG,Scheduler.class,str);
+		DefaultLogger.log(LoggerLevel.DEBUG,Scheduler.class,str);
 	}
 
 	

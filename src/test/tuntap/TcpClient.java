@@ -19,27 +19,26 @@
 
 package test.tuntap;
 
-
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4Layer;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.ip4.SocketAddress;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.stack.LossyIpInterface;
-import it.unipr.netsec.ipstack.tcp.TcpConnection;
-import it.unipr.netsec.ipstack.tcp.TcpConnectionListener;
-import it.unipr.netsec.ipstack.tcp.TcpLayer;
-import it.unipr.netsec.tuntap.Ip4TunInterface;
-import it.unipr.netsec.tuntap.Ip4TuntapInterface;
-
 import java.io.IOException;
 
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
+
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4Layer;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.ip4.SocketAddress;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.stack.LossyIpInterface;
+import io.ipstack.net.tcp.TcpConnection;
+import io.ipstack.net.tcp.TcpConnectionListener;
+import io.ipstack.net.tcp.TcpLayer;
+import io.ipstack.net.tuntap.Ip4TunInterface;
+import io.ipstack.net.tuntap.Ip4TuntapInterface;
 
 
 /** TCP client running onto a IPv4 node attached to a TUN interface.
@@ -70,7 +69,7 @@ public abstract class TcpClient {
 			System.exit(0);					
 		}	
 		if (verbose) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			Ip4TunInterface.DEBUG=true;
 			LossyIpInterface.DEBUG=true;
 			//Node.DEBUG=true;

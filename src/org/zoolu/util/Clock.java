@@ -21,9 +21,6 @@
 package org.zoolu.util;
 
 
-import org.zoolu.util.Timer;
-import org.zoolu.util.TimerListener;
-
 
 /** A clock that maintains a time variable.
  * It provides methods for getting the current time and for creating {@link org.zoolu.util.Timer timers}.

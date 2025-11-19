@@ -19,19 +19,16 @@
 
 package it.unipr.netsec.nemo.networkfunction;
 
-
-
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.ip6.exthdr.ExtensionHeader;
-import it.unipr.netsec.ipstack.ip6.exthdr.SegmentRoutingHeader;
-
 import org.zoolu.util.Bytes;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.ip6.exthdr.ExtensionHeader;
+import io.ipstack.net.ip6.exthdr.SegmentRoutingHeader;
 
 import java.util.ArrayList;
-
 
 
 /** Adds IPv6 SR Header with a given segment list.
@@ -45,7 +42,7 @@ public class Ip6SrAddFunction extends NetworkFunction {
 	
 	/** Prints a debug message. */
 	private static void debug(String str) {
-		if (DEBUG) SystemUtils.log(LoggerLevel.DEBUG,Ip6SrAddFunction.class,str);
+		if (DEBUG) DefaultLogger.log(LoggerLevel.DEBUG,Ip6SrAddFunction.class,str);
 	}
 
 	

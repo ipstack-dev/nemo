@@ -1,0 +1,56 @@
+package it.unipr.netsec.nemo.websocket;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.util.HashMap;
+
+import org.zoolu.util.Base64;
+import org.zoolu.util.Random;
+
+import it.unipr.netsec.ipstack.ip4.SocketAddress;
+import it.unipr.netsec.nemo.http.HttpInputStream;
+import it.unipr.netsec.nemo.http.HttpMessage;
+import it.unipr.netsec.nemo.http.HttpRequest;
+import it.unipr.netsec.nemo.http.HttpResponse;
+
+
+public final class WebsocketClient {
+	private WebsocketClient() {}
+	
+	public static WebSocket connect(String endpoint) throws IOException {
+		try {
+			java.net.Socket socket= new java.net.Socket();
+			socket.connect(new SocketAddress(endpoint).toInetSocketAddress());
+			InputStream is= socket.getInputStream();
+			OutputStream os= socket.getOutputStream();
+			
+			HashMap<String,String> hdr= new HashMap<>();
+			hdr.put("Host",endpoint);
+			hdr.put("Connection","Upgrade");
+			hdr.put("Upgrade","websocket");
+			hdr.put("Origin","null");
+			hdr.put("Sec-WebSocket-Version","13");
+			byte[] key= new byte[16];
+			Random.nextBytes(key);
+			String wsKey= Base64.encode(key);
+			hdr.put("Sec-WebSocket-Key",wsKey);
+			hdr.put("Pragma","no-cache");
+			hdr.put("Cache-Control","no-cache");
+			
+			HttpRequest req= new HttpRequest("GET","/",hdr,null);
+			os.write(req.toString().getBytes());
+			
+			HttpResponse resp= new HttpResponse(HttpMessage.parseHttpMessage(new HttpInputStream(socket)));
+			String wsAccept= resp.getHeaderField("Sec-WebSocket-Accept");
+			String wsAcceptCheck= Base64.encode(MessageDigest.getInstance("SHA-1").digest((wsKey+WebSocketFrame.WS_UUID).getBytes()));
+			if (wsAccept.equals(wsAcceptCheck)) return new WebSocket(is,os,true);			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+}

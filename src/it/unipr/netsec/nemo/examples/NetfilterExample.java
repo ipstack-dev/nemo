@@ -3,8 +3,8 @@ package it.unipr.netsec.nemo.examples;
 
 import org.zoolu.util.SystemUtils;
 
-import it.unipr.netsec.ipstack.analyzer.ProtocolAnalyzer;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
+import io.ipstack.net.analyzer.ProtocolAnalyzer;
+import io.ipstack.net.ip4.Ip4Packet;
 import it.unipr.netsec.netfilter.NetfilterQueue;
 import it.unipr.netsec.netfilter.PacketHandler;
 

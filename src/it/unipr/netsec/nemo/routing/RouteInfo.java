@@ -20,8 +20,8 @@
 package it.unipr.netsec.nemo.routing;
 
 
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.NetAddress;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.NetAddress;
 
 
 /** Routing entry.

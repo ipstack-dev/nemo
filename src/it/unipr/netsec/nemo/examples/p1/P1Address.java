@@ -3,7 +3,7 @@ package it.unipr.netsec.nemo.examples.p1;
 
 import java.util.Arrays;
 
-import it.unipr.netsec.ipstack.net.Address;
+import io.ipstack.net.packet.Address;
 
 
 /** Address containing a pair of indexes i,j.

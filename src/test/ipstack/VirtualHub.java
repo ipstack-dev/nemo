@@ -1,25 +1,20 @@
 package test.ipstack;
 
 
-import java.net.SocketException;
-
-import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
-
-import it.unipr.netsec.ipstack.ethernet.EthTunnelHub;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 
-/** virtual Ethernet hub, connecting remote hosts via Ethernet-over-UDP tuunels.
+/** Virtual Ethernet hub, connecting remote hosts via Ethernet-over-UDP tunnels.
  */
 public abstract class VirtualHub {
 
 
 	/** Main method. 
-	 * @throws SocketException */
-	public static void main(String[] args) throws SocketException {
-		Flags flags=new Flags(args);
+	 * @throws IOException */
+	public static void main(String[] args) throws IOException {
+		/*Flags flags=new Flags(args);
 		int port=flags.getInteger("-p",EthTunnelHub.DEFAULT_PORT,"<port>","local UDP port (default "+EthTunnelHub.DEFAULT_PORT+")");
 		int max_endpoints=flags.getInteger("-n",EthTunnelHub.DEFAULT_SWITCH_SIZE,"<num>","maximum number of endpoints (default "+EthTunnelHub.DEFAULT_SWITCH_SIZE+")");
 		boolean verbose=flags.getBoolean("-v","verbose mode");
@@ -33,7 +28,10 @@ public abstract class VirtualHub {
 			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
 			EthTunnelHub.DEBUG=true;
 		}
-		new EthTunnelHub(port,max_endpoints);
+		new EthTunnelHub(port,max_endpoints);*/
+		
+		args=Stream.concat(Arrays.stream(new String[]{"-hub"}),Arrays.stream(args)).toArray(String[]::new);
+		VirtualSwitch.main(args);
 	}
 
 }

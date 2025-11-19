@@ -3,9 +3,9 @@ package it.unipr.netsec.nemo.examples;
 
 import java.net.SocketException;
 
-import it.unipr.netsec.ipstack.analyzer.ProtocolAnalyzer;
-import it.unipr.netsec.ipstack.ethernet.EthPacket;
-import it.unipr.netsec.rawsocket.RawLinkSocket;
+import io.ipstack.net.analyzer.ProtocolAnalyzer;
+import io.ipstack.net.ethernet.EthPacket;
+import io.ipstack.net.rawsocket.RawLinkSocket;
 
 
 public class TcpdumpExample {

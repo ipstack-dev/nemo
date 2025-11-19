@@ -1,7 +1,9 @@
 package org.zoolu.util.config;
 
-
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.zoolu.util.Bytes;
 import org.zoolu.util.Parser;
@@ -21,11 +23,12 @@ public class ReflectiveObject {
 	public ReflectiveObject(Object obj, boolean fullAccess) {
 		this.obj=obj;
 		this.fullAccess=fullAccess;
-		fields=(fullAccess)? obj.getClass().getDeclaredFields() : obj.getClass().getFields();
+		//fields=(fullAccess)? obj.getClass().getDeclaredFields() : obj.getClass().getFields();
+		fields=getAllFields(obj.getClass());
 	}
 
 	
-	/** Gets attriubutes. */
+	/** Gets attributes. */
 	public String[] getAttributes() {
 		String[] attributes=new String[fields.length];
 		for (int i=0; i<fields.length; i++) {
@@ -35,7 +38,7 @@ public class ReflectiveObject {
 	}
 
 	
-	/** Gets attriubute type. */
+	/** Gets attribute type. */
 	public String getAttributeType(String attribute) {
 		String type=null;
 		for (int i=0; i<fields.length; i++) {
@@ -53,7 +56,7 @@ public class ReflectiveObject {
 	}
 
 	
-	/** Gets attriubute value as string. */
+	/** Gets attribute value as string. */
 	public Object getAttributeValue(String attribute) {
 		Object value=null;
 		//java.lang.reflect.Field[] fields=target.getClass().getFields();
@@ -240,5 +243,17 @@ public class ReflectiveObject {
 		return null;
 	}
 
+	
+	/** gets all public, private, and protected fields, including attributes inherited from all superclasses
+	 * @param type
+	 * @return the list of fields
+	 */
+	public static Field[] getAllFields(Class<?> type) {
+		List<Field> fields= new ArrayList<Field>();
+		for (Class<?> c= type; c!=null; c= c.getSuperclass()) {
+			fields.addAll(Arrays.asList(c.getDeclaredFields()));
+		}
+		return fields.toArray(new Field[0]);
+	}
 	
 }

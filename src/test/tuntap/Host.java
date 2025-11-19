@@ -19,23 +19,22 @@
 
 package test.tuntap;
 
-
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4Layer;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.tuntap.Ip4TunInterface;
-import it.unipr.netsec.tuntap.Ip4TuntapInterface;
-import it.unipr.netsec.tuntap.TapInterface;
-
 import java.io.IOException;
 
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
+
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4Layer;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.tuntap.Ip4TunInterface;
+import io.ipstack.net.tuntap.Ip4TuntapInterface;
+import io.ipstack.net.tuntap.TapInterface;
 
 
 /** Simple IPv4 node attached to a TUN interface.
@@ -56,7 +55,7 @@ public abstract class Host {
 			System.exit(0);					
 		}
 		if (verbose) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			Ip4TunInterface.DEBUG=true;
 			TapInterface.DEBUG=true;
 		}

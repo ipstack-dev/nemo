@@ -1,32 +1,31 @@
 package it.unipr.netsec.nemo.ip;
 
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
-import it.unipr.netsec.ipstack.icmp4.PingClient;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Layer;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.stack.IpStack;
+import io.ipstack.net.icmp4.PingClient;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Layer;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.stack.IpStack;
 import it.unipr.netsec.nemo.telnet.server.TelnetServer;
 
 
-public abstract class Ip4Node extends it.unipr.netsec.ipstack.ip4.Ip4Node {
+public abstract class Ip4Node extends io.ipstack.net.ip4.Ip4Node {
 	
 	/** Debug mode */
 	public static boolean DEBUG=false;
 
 	/** Prints a debug message. */
 	void debug(String str) {
-		//SystemUtils.log(LoggerLevel.DEBUG,toString()+": "+str);
-		SystemUtils.log(LoggerLevel.DEBUG,Ip4Host.class.getSimpleName()+"["+getAddress()+"]: "+str);
+		//DefaultLogger.log(LoggerLevel.DEBUG,toString()+": "+str);
+		DefaultLogger.log(LoggerLevel.DEBUG,Ip4Host.class.getSimpleName()+"["+getAddress()+"]: "+str);
 	}
 
 	

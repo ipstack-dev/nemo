@@ -1,10 +1,10 @@
 package test.nemo.mngnetwork.info;
 
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.stack.IpInterfaceUtils;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.stack.IpInterfaceUtils;
 
 
 public class NetInterfaceInfo {	

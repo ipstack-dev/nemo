@@ -1,8 +1,7 @@
 package it.unipr.netsec.nemo.dhcp.ipconfig;
 
-
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
 import it.unipr.netsec.nemo.dhcp.DhcpStack;
 
@@ -63,7 +62,7 @@ public abstract class HostConfigurator {
 	public void configureSip() {
 		if (sip_server==null) return;
 		
-	SystemUtils.getDefaultLogger().log(LoggerLevel.INFO,getClass(),"configure sip outbound server: "+sip_server);
+	DefaultLogger.log(LoggerLevel.INFO,getClass(),"configure sip outbound server: "+sip_server);
 		try {
 			BufferedWriter out=new BufferedWriter(new FileWriter(stack.sip_outbound_file));
 			out.write(sip_server);

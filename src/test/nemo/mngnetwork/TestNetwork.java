@@ -1,6 +1,5 @@
 package test.nemo.mngnetwork;
 
-
 import static java.lang.System.out;
 
 import java.io.File;
@@ -8,21 +7,23 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
-import org.zoolu.util.json.JsonUtils;
+import org.zoolu.util.json.Json;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
 
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.link.Link;
-import it.unipr.netsec.ipstack.link.LinkInterface;
-import it.unipr.netsec.ipstack.tcp.TcpConnection;
-import it.unipr.netsec.ipstack.tcp.TcpLayer;
-import it.unipr.netsec.nemo.http.HttpServer;
+import io.ipstack.http.HttpServer;
+import io.ipstack.net.ethernet.EthAddress;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.link.Link;
+import io.ipstack.net.link.LinkInterface;
+import io.ipstack.net.tcp.TcpConnection;
+import io.ipstack.net.tcp.TcpLayer;
+import io.ipstack.net.tuntap.Ip4TuntapInterface;
+import io.ipstack.net.tuntap.TuntapSocket;
 import it.unipr.netsec.nemo.ip.Ip4Host;
 import it.unipr.netsec.nemo.ip.Ip4Node;
 import it.unipr.netsec.nemo.ip.Ip4Router;
@@ -30,8 +31,6 @@ import it.unipr.netsec.nemo.link.Network;
 import it.unipr.netsec.nemo.telnet.Telnet;
 import it.unipr.netsec.nemo.telnet.server.TelnetServer;
 import it.unipr.netsec.nemo.telnet.server.TelnetServerSession;
-import it.unipr.netsec.tuntap.Ip4TuntapInterface;
-import it.unipr.netsec.tuntap.TuntapSocket;
 import test.nemo.mngnetwork.info.ConfigNetworkInfo;
 
 
@@ -100,13 +99,13 @@ public abstract class TestNetwork {
 		TelnetServerSession.ENABLE_AUTHENTICATION=!noauth;
 		TelnetServerSession.ENABLE_HALT=!nohalt;
 		if (verbose) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(out,LoggerLevel.DEBUG));
 			Ip4Node.DEBUG=true;
 			TcpLayer.DEBUG=true;
 			TcpConnection.DEBUG=true;
 		}
 		else {
-			SystemUtils.setDefaultLogger(new LoggerWriter(out,LoggerLevel.INFO));
+			DefaultLogger.setLogger(new WriterLogger(out,LoggerLevel.INFO));
 		}
 		HttpServer.VERBOSE=true;
 		Telnet.VERBOSE=true;
@@ -136,11 +135,11 @@ public abstract class TestNetwork {
 		TestNetworkInfo test_network_info=new TestNetworkInfo();
 		Network<Ip4Node,Link<Ip4Address,Ip4Packet>> network;
 		if (network_file!=null) {
-			ConfigNetworkInfo network_info=(ConfigNetworkInfo)JsonUtils.fromJsonFile(new File(network_file),ConfigNetworkInfo.class);
+			ConfigNetworkInfo network_info=(ConfigNetworkInfo)Json.fromJSONFile(new File(network_file),ConfigNetworkInfo.class);
 			network=TestNetworkFactory.getInstance(network_info,passwd_db0);
 		}
 		else {
-			if (config_file!=null) JsonUtils.fromJsonFile(new File(config_file),test_network_info);		
+			if (config_file!=null) Json.fromJSONFile(new File(config_file),test_network_info);		
 			if (num!=null) {
 				test_network_info.num_nets=Integer.parseInt(num[0]);
 				test_network_info.num_servers=Integer.parseInt(num[1]);

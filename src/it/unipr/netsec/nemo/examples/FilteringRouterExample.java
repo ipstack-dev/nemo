@@ -1,12 +1,12 @@
 package it.unipr.netsec.nemo.examples;
 
-
-import org.zoolu.util.LoggerWriter;
 import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.WriterLogger;
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
 import it.unipr.netsec.nemo.ip.Ip4Host;
 import it.unipr.netsec.nemo.ip.IpLink;
 
@@ -24,7 +24,7 @@ public class FilteringRouterExample {
 
 	public static void main(String[] args) {
 		boolean verbose=true;
-		if (verbose) SystemUtils.setDefaultLogger(new LoggerWriter(System.out));
+		if (verbose) DefaultLogger.setLogger(new WriterLogger(System.out));
 		
 		long bit_rate=1000000; // 1Mb/s
 		IpLink<Ip4Address,Ip4Packet> link1=new IpLink<>(bit_rate,new Ip4Prefix("10.1.0.0/24"));

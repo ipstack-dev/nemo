@@ -13,12 +13,13 @@ import java.util.HashMap;
 
 import org.zoolu.util.Flags;
 
-import it.unipr.netsec.ipstack.socket.Socket;
-import it.unipr.netsec.ipstack.stack.IpStack;
-import it.unipr.netsec.nemo.http.HttpMessage;
-import it.unipr.netsec.nemo.http.HttpRequest;
-import it.unipr.netsec.nemo.http.HttpRequestURL;
-import it.unipr.netsec.nemo.http.HttpResponse;
+import io.ipstack.http.HttpMessage;
+import io.ipstack.http.HttpRequest;
+import io.ipstack.http.HttpRequestURL;
+import io.ipstack.http.HttpResponse;
+import io.ipstack.net.socket.JavanetSocket;
+import io.ipstack.net.socket.Socket;
+import io.ipstack.net.stack.IpStack;
 
 
 /** Command-line HTTP client.
@@ -80,7 +81,7 @@ public class Curl implements Program {
 			String host=colon>0?hostport.substring(0,colon):hostport;
 			InetAddress iaddr=InetAddress.getByName(host);
 			int port=colon>0?Integer.parseInt(hostport.substring(colon+1)):80;
-			socket=ip_stack!=null? new Socket(new it.unipr.netsec.ipstack.tcp.Socket(ip_stack.getTcpLayer(),iaddr,port)) : new Socket(new java.net.Socket(iaddr,port));
+			socket=ip_stack!=null? new io.ipstack.net.tcp.Socket(ip_stack.getTcpLayer(),iaddr,port) : new JavanetSocket(new java.net.Socket(iaddr,port));
 			if (!is_running) {
 				socket.close();
 				return;

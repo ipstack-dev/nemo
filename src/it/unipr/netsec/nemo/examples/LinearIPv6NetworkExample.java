@@ -1,9 +1,9 @@
 package it.unipr.netsec.nemo.examples;
 
 
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.ip6.Ip6Prefix;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.ip6.Ip6Prefix;
 import it.unipr.netsec.nemo.ip.Ip6Host;
 import it.unipr.netsec.nemo.ip.Ip6Router;
 import it.unipr.netsec.nemo.ip.IpLink;

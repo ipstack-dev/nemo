@@ -1,26 +1,29 @@
 package org.zoolu.util;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
-/** Class that collects static methods for dealing with arrays.
+/** Collections of static methods for dealing with arrays.
  */
-public abstract class ArrayUtils {
+public final class ArrayUtils {
+	private ArrayUtils() {}
 
 	/** Converts an array of objects to a string.
 	 * @param objs array of objects
-	 * @return comma-separated list of objects */
+	 * @return comma-separated list of objects
+	 */
 	public static String toString(Object[] objs) {
 		return toString(Arrays.asList(objs));
 	}
 	
 	/** Converts a list of objects to a string.
 	 * @param objs array of objects
-	 * @return comma-separated list of objects */
+	 * @return comma-separated list of objects
+	 */
 	public static String toString(List<?> objs) {
 		StringBuffer sb=new StringBuffer();
 		for (int i=0; i<objs.size(); i++) {
@@ -33,7 +36,8 @@ public abstract class ArrayUtils {
 
 	/** Creates a new ArrayList with one element.
 	 * @param e the element
-	 * @return the ArrayList */
+	 * @return the ArrayList
+	 */
 	public static <E> ArrayList<E> arraylist(E e) {
 		ArrayList<E> list=new ArrayList<>();
 		if (e!=null) list.add(e);
@@ -43,7 +47,8 @@ public abstract class ArrayUtils {
 	/** Creates a list with the given elements.
 	 * The copy is done in safe mode (synchronized).
 	 * @param c collection of elements
-	 * @return the list */
+	 * @return the list
+	 */
 	public static <E> ArrayList<E> synchronizedList(Collection<E> c) {
 		ArrayList<E> list;
 		synchronized (c) {
@@ -53,19 +58,22 @@ public abstract class ArrayUtils {
 	}
 
 	/** Right-rotates an array.
-	 * @param a the array to be rotated */
+	 * @param a the array to be rotated
+	 */
 	/*public static <T> void rotateRight(ArrayList<T> a) {
 		a.add(0,a.remove(a.size()-1));
 	}*/
 
 	/** Left-rotates an array.
-	 * @param a the array to be rotated */
+	 * @param a the array to be rotated
+	 */
 	/*public static <T> void rotateLeft(ArrayList<T> a) {
 		a.add(a.remove(0));
 	}*/
 
 	/** Right-rotates an array of one element.
-	 * @param a the array to be rotated */
+	 * @param a the array to be rotated
+	 */
 	public static void rotateRight(Object a) {
 		if (a instanceof byte[]) {
 			byte[] aa=(byte[])a;
@@ -125,7 +133,8 @@ public abstract class ArrayUtils {
 	}
 
 	/** Left-rotates an array of one element.
-	 * @param a the array to be rotated */
+	 * @param a the array to be rotated
+	 */
 	public static void rotateLeft(Object a) {
 		if (a instanceof byte[]) {
 			byte[] aa=(byte[])a;
@@ -191,7 +200,18 @@ public abstract class ArrayUtils {
 			return;
 		}
 		throw new RuntimeException("It isn't an array");
-
+	}
+	
+	/** Converts a collection to a string array.
+	 * @param c a collection
+	 * @return an array of strings
+	 */
+	public static <T> String[] toStringArray(Collection<T> c) {
+		if (c==null) return null;
+		String[] a= new String[c.size()];
+		AtomicInteger i= new AtomicInteger();
+		c.forEach((T elem)->{a[i.getAndIncrement()]=elem.toString();});
+		return a;
 	}
 
 }

@@ -29,7 +29,7 @@ import java.net.UnknownHostException;
 import org.zoolu.util.Bytes;
 
 
-/** Listener for UdpProvider events.
+/** Methods for handling Internet socket addresses.
   */
 public class InetAddrUtils {
 
@@ -55,13 +55,14 @@ public class InetAddrUtils {
 	 * @return the socket address
 	 * @throws IOException */
 	public static InetSocketAddress parseInetSocketAddress(String soaddr) throws IOException {
-		int index=soaddr.length()-1;
+		/*int index=soaddr.length()-1;
 		while (index>=0 && soaddr.charAt(index)!=':') index--;
 		if (index<0) throw new IOException("Malformed socket address: port number not found: "+soaddr);
 		InetAddress inetaddr;
 		inetaddr=InetAddress.getByName(soaddr.substring(0,index));
 		int port=Integer.parseInt(soaddr.substring(index+1));
-		return new InetSocketAddress(inetaddr,port);
+		return new InetSocketAddress(inetaddr,port);*/
+		return new InetSocketAddress(parseSocketInetAddress(soaddr),parseSocketPort(soaddr));
 	}
 
 	/** Gets a string representation of a socket address.
@@ -70,6 +71,58 @@ public class InetAddrUtils {
 	public static String toString(InetSocketAddress soaddr) {
 		if (soaddr==null) return null;
 		return soaddr.getAddress().getHostAddress()+':'+soaddr.getPort();
+	}
+
+	/** Gets the IP address of a socket address.
+	 * @param soaddr the socket address
+	 * @return the IP address
+	 * @throws IOException */
+	public static InetAddress parseSocketInetAddress(String soaddr) throws IOException {
+		return InetAddress.getByName(parseSocketHost(soaddr));
+	}
+	
+	/** Gets the host part of a socket address.
+	 * @param soaddr the socket address
+	 * @return the host
+	 * @throws IOException */
+	public static String parseSocketHost(String soaddr) throws IOException {
+		int begin=soaddr.indexOf('[');
+		if (begin>=0) {
+			int end=soaddr.indexOf(']');
+			if (end<0) throw new IOException("Malformed socket address: "+soaddr);
+			return soaddr.substring(begin+1,end);
+		}
+		else {
+			int end=soaddr.indexOf(':');
+			if (end>=0 && soaddr.indexOf(':',end+1)>0) end=-1; // IPv6 address?
+			return end<0? soaddr : soaddr.substring(0,end);
+		}
+	}
+	
+	/** Gets the port value of a socket address.
+	 * @param soaddr the socket address
+	 * @return the port value if present, otherwise -1
+	 * @throws IOException */
+	public static int parseSocketPort(String soaddr) throws IOException {
+		return parseSocketPort(soaddr,-1);
+	}
+	
+	/** Gets the port value of a socket address.
+	 * @param soaddr the socket address
+	 * @param defaultport the default port value
+	 * @return the port value if present, otherwise the default value
+	 * @throws IOException */
+	public static int parseSocketPort(String soaddr, int defaultport) throws IOException {
+		int index=soaddr.indexOf('[');
+		if (index>=0) {
+			index=soaddr.indexOf(']');
+			if (index<0) throw new IOException("Malformed socket address: "+soaddr);
+			index++;
+		}
+		else index=0;
+		index=soaddr.indexOf(':',index);
+		if (index>=0 && soaddr.indexOf(':',index+1)>0) index=-1; // IPv6 address?
+		return index<0? defaultport : Integer.parseInt(soaddr.substring(index+1));
 	}
 
 }

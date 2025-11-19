@@ -1,10 +1,9 @@
 package it.unipr.netsec.nemo.dhcp;
 
-
-import org.zoolu.util.Logger;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.Logger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
 
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -88,9 +87,9 @@ public class DhcpServer extends Thread {
 		masks.put(addr,mask);
 		address_log+="\naddress="+addr+"\t"+"mask="+mask;
 		}
-		SystemUtils.getDefaultLogger().log(LoggerLevel.INFO,getClass(),address_log);
+		DefaultLogger.log(LoggerLevel.INFO,getClass(),address_log);
 
-		messagelog=new LoggerWriter(stack.log_path+"//server-"+stack.server_port+".log",LoggerLevel.INFO); 
+		messagelog=new WriterLogger(stack.log_path+"//server-"+stack.server_port+".log",LoggerLevel.INFO); 
 	}
 	
 	/** Moves expired addresses from 'assigned_addresses' set
@@ -450,7 +449,7 @@ public class DhcpServer extends Thread {
 
 	/** Logs a textual message */
 	private void printlog(String str, LoggerLevel level) {
-		SystemUtils.getDefaultLogger().log(level,getClass(),str);
+		DefaultLogger.log(level,getClass(),str);
 	}
 
 	/** Logs a DHCP message */

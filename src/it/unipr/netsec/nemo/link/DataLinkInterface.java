@@ -19,33 +19,29 @@
 
 package it.unipr.netsec.nemo.link;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.zoolu.util.Clock;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
 import org.zoolu.util.Timer;
 import org.zoolu.util.TimerListener;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ethernet.EthPacket;
-import it.unipr.netsec.ipstack.link.Link;
-import it.unipr.netsec.ipstack.link.LinkInterface;
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.NetInterfaceListener;
-import it.unipr.netsec.ipstack.net.Packet;
+import io.ipstack.net.link.Link;
+import io.ipstack.net.link.LinkInterface;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.NetInterfaceListener;
+import io.ipstack.net.packet.Packet;
 
 
-/** Generic {@link it.unipr.netsec.ipstack.link.LinkInterface link interface} attached to a {@link DataLink link} with a finite bit-rate.
+/** Generic {@link io.ipstack.net.link.LinkInterface link interface} attached to a {@link DataLink link} with a finite bit-rate.
  */
 public class DataLinkInterface<A extends Address, P extends Packet<A>> extends LinkInterface<A,P> {
 
 	/** Prints a debug message. */
 	private void debug(String str) {
-		SystemUtils.log(LoggerLevel.DEBUG,DataLinkInterface.class.getSimpleName()+"["+getName()+"]: "+str);
+		DefaultLogger.log(LoggerLevel.DEBUG,DataLinkInterface.class.getSimpleName()+"["+getName()+"]: "+str);
 	}
 
 	

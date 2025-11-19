@@ -20,14 +20,6 @@
 package test.rawsocket;
 
 
-import it.unipr.netsec.ipstack.arp.ArpClient;
-import it.unipr.netsec.ipstack.arp.ArpLayer;
-import it.unipr.netsec.ipstack.arp.ArpServer;
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ethernet.EthLayer;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.rawsocket.ethernet.RawEthInterface;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
@@ -36,11 +28,19 @@ import java.util.Enumeration;
 
 import org.zoolu.util.Flags;
 
+import io.ipstack.net.arp.ArpClient;
+import io.ipstack.net.arp.ArpLayer;
+import io.ipstack.net.arp.ArpServer;
+import io.ipstack.net.ethernet.EthAddress;
+import io.ipstack.net.ethernet.EthLayer;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.rawsocket.ethernet.RawEthInterface;
+
 
 /** ARP client and (optionally) ARP server.
  * It is bound to a network card and performs IP address to Ethernet address lookup.
  * <p>
- * It uses {@link it.unipr.netsec.rawsocket.ethernet.RawEthInterface} for capturing and/sending
+ * It uses {@link io.ipstack.net.rawsocket.ethernet.RawEthInterface} for capturing and/sending
  * raw Ethernet packets.
  */
 public abstract class ArpLookup {

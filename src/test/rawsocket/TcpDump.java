@@ -20,20 +20,20 @@
 package test.rawsocket;
 
 
-import it.unipr.netsec.ipstack.analyzer.LibpcapHeader;
-import it.unipr.netsec.ipstack.analyzer.LibpcapWriter;
-import it.unipr.netsec.ipstack.analyzer.ProtocolAnalyzer;
-import it.unipr.netsec.ipstack.ethernet.EthPacket;
-import it.unipr.netsec.rawsocket.RawLinkSocket;
-
 import java.io.IOException;
 
 import org.zoolu.util.Flags;
 
+import io.ipstack.net.analyzer.LibpcapHeader;
+import io.ipstack.net.analyzer.LibpcapWriter;
+import io.ipstack.net.analyzer.ProtocolAnalyzer;
+import io.ipstack.net.ethernet.EthPacket;
+import io.ipstack.net.rawsocket.RawLinkSocket;
+
 
 /** It analyzes all packets captured at data-link level.
  * <p> 
- * It uses {@link it.unipr.netsec.rawsocket.RawLinkSocket}, that in turn uses a PF_PACKET SOCK_RAW socket.
+ * It uses {@link io.ipstack.net.rawsocket.RawLinkSocket}, that in turn uses a PF_PACKET SOCK_RAW socket.
  * Since PF_PACKET SOCK_RAW sockets are not supported neither in Windows OS neither nor in Mac OS,
  * TcpDump can be run only on Linux OS.
  */

@@ -1,18 +1,17 @@
 package test.ipstack;
 
-
 import java.io.IOException;
 
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
 
-import it.unipr.netsec.ipstack.ethernet.EthHub;
-import it.unipr.netsec.ipstack.ethernet.EthTunnelHub;
-import it.unipr.netsec.ipstack.ethernet.EthTunnelInterface;
-import it.unipr.netsec.ipstack.ip4.SocketAddress;
-import it.unipr.netsec.tuntap.TapInterface;
+import io.ipstack.net.ethernet.EthHub;
+import io.ipstack.net.ethernet.EthTunnelHub;
+import io.ipstack.net.ethernet.EthTunnelInterface;
+import io.ipstack.net.ip4.SocketAddress;
+import io.ipstack.net.tuntap.TapInterface;
 
 
 /** Ethernet repeater connecting a TAP interface to a (possibly remote) virtual hub.
@@ -34,7 +33,7 @@ public abstract class TapStub {
 		}
 		// else
 		if (verbose) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			EthHub.VERBOSE=true;
 		}
 		new EthHub(new TapInterface(dev,null),new EthTunnelInterface(port,new SocketAddress(hub_soaddr),null));

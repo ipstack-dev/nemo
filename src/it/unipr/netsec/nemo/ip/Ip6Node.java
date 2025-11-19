@@ -1,29 +1,28 @@
 package it.unipr.netsec.nemo.ip;
 
-
 import java.io.PrintStream;
 import java.util.List;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
-import it.unipr.netsec.ipstack.icmp6.Ping6Client;
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6Layer;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.stack.IpStack;
+import io.ipstack.net.icmp6.Ping6Client;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6Layer;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.stack.IpStack;
 
 
-public abstract class Ip6Node extends it.unipr.netsec.ipstack.ip6.Ip6Node {
+public abstract class Ip6Node extends io.ipstack.net.ip6.Ip6Node {
 	
 	/** Debug mode */
 	public static boolean DEBUG=false;
 
 	/** Prints a debug message. */
 	void debug(String str) {
-		//SystemUtils.log(LoggerLevel.DEBUG,toString()+": "+str);
-		SystemUtils.log(LoggerLevel.DEBUG,Ip6Host.class.getSimpleName()+"["+getAddress()+"]: "+str);
+		//DefaultLogger.log(LoggerLevel.DEBUG,toString()+": "+str);
+		DefaultLogger.log(LoggerLevel.DEBUG,Ip6Host.class.getSimpleName()+"["+getAddress()+"]: "+str);
 	}
 
 	

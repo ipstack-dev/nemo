@@ -5,10 +5,10 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Hashtable;
 
-import it.unipr.netsec.ipstack.stack.IpStack;
-import it.unipr.netsec.ipstack.tcp.ConnectionIdentifier;
-import it.unipr.netsec.ipstack.tcp.TcpLayerListener;
-import it.unipr.netsec.ipstack.udp.UdpLayerListener;
+import io.ipstack.net.stack.IpStack;
+import io.ipstack.net.tcp.ConnectionIdentifier;
+import io.ipstack.net.tcp.TcpLayerListener;
+import io.ipstack.net.udp.UdpLayerListener;
 
 
 /** <i>netstat</i> command.

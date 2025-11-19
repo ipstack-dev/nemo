@@ -20,15 +20,15 @@
 package it.unipr.netsec.nemo.ip;
 
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.ip4.IpAddress;
-import it.unipr.netsec.ipstack.ip4.IpPrefix;
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6AddressPrefix;
-
 import org.zoolu.util.Bytes;
+
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.ip4.IpAddress;
+import io.ipstack.net.ip4.IpPrefix;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6AddressPrefix;
 
 
 /** IP address pool for dynamic address configuration.

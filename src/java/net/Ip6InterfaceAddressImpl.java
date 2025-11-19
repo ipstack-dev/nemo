@@ -20,7 +20,7 @@
 package java.net;
 
 
-import it.unipr.netsec.ipstack.ip6.Ip6AddressPrefix;
+import io.ipstack.net.ip6.Ip6AddressPrefix;
 
 
 class Ip6InterfaceAddressImpl extends InterfaceAddress {

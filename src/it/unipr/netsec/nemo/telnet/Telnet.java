@@ -1,18 +1,17 @@
 package it.unipr.netsec.nemo.telnet;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
-import it.unipr.netsec.ipstack.ip4.SocketAddress;
-import it.unipr.netsec.ipstack.socket.Socket;
-import it.unipr.netsec.ipstack.tcp.TcpLayer;
+import io.ipstack.net.ip4.SocketAddress;
+import io.ipstack.net.socket.Socket;
+import io.ipstack.net.tcp.TcpLayer;
 
 
 /** A TELNET session.
@@ -22,8 +21,8 @@ public class Telnet {
 	public static boolean VERBOSE=false;
 	
 	private void log(String str) {
-		//SystemUtils.log(LoggerLevel.INFO,this.getClass(),str);
-		SystemUtils.log(LoggerLevel.INFO,null,toString()+": "+str);
+		//DefaultLogger.log(LoggerLevel.INFO,this.getClass(),str);
+		DefaultLogger.log(LoggerLevel.INFO,null,toString()+": "+str);
 	}
 	
 	

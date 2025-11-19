@@ -4,11 +4,11 @@ package test.nemo.mngnetwork.info;
 import java.util.ArrayList;
 import java.util.Set;
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Layer;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.routing.Route;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Layer;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Route;
 import it.unipr.netsec.nemo.ip.Ip4Node;
 
 

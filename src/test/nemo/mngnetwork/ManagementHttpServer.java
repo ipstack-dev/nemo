@@ -1,32 +1,30 @@
 package test.nemo.mngnetwork;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.zoolu.util.json.JsonUtils;
-import org.zoolu.util.json.JzonObject;
+import org.zoolu.util.json.Json;
 
-import it.unipr.netsec.ipstack.icmp4.PingClient;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.link.Link;
-import it.unipr.netsec.ipstack.link.LinkInterface;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.routing.Route;
-import it.unipr.netsec.ipstack.routing.RoutingTable;
-import it.unipr.netsec.ipstack.stack.Links;
-import it.unipr.netsec.ipstack.util.IpAddressUtils;
-import it.unipr.netsec.nemo.http.HttpRequest;
-import it.unipr.netsec.nemo.http.HttpRequestHandle;
-import it.unipr.netsec.nemo.http.HttpRequestURL;
-import it.unipr.netsec.nemo.http.HttpServer;
-import it.unipr.netsec.nemo.http.uri.AbsolutePath;
-import it.unipr.netsec.nemo.http.uri.Parameter;
-import it.unipr.netsec.nemo.http.uri.Query;
+import io.ipstack.http.HttpRequest;
+import io.ipstack.http.HttpRequestHandle;
+import io.ipstack.http.HttpRequestURL;
+import io.ipstack.http.HttpServer;
+import io.ipstack.http.uri.AbsolutePath;
+import io.ipstack.http.uri.Parameter;
+import io.ipstack.http.uri.Query;
+import io.ipstack.net.icmp4.PingClient;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.link.Link;
+import io.ipstack.net.link.LinkInterface;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Route;
+import io.ipstack.net.packet.RoutingTable;
+import io.ipstack.net.stack.Links;
+import io.ipstack.net.util.IpAddressUtils;
 import it.unipr.netsec.nemo.ip.Ip4Host;
 import it.unipr.netsec.nemo.ip.Ip4Node;
 import it.unipr.netsec.nemo.link.Network;
@@ -158,7 +156,7 @@ public class ManagementHttpServer {
 			try {
 				String body=new String(req_handle.getRequest().getBody());
 				System.out.println("DEBUG: processPost(): add node: "+body);
-				NodeInfo nodeInfo=JsonUtils.fromJson(body,NodeInfo.class);
+				NodeInfo nodeInfo=Json.fromJSON(body,NodeInfo.class);
 				String[] links=nodeInfo.getLinks();
 				String label=nodeInfo.getLabel();
 				if (network.getNode(label)!=null) throw new RuntimeException("Node label already used");
@@ -168,7 +166,7 @@ public class ManagementHttpServer {
 				network.addNode(node);
 				req_handle.setResponseCode(200);
 				req_handle.setResponseContentType("application/json");
-				req_handle.setResponseBody(JsonUtils.toJson(nodeInfo).getBytes());
+				req_handle.setResponseBody(Json.toJSON(nodeInfo).getBytes());
 				return true;
 			}
 			catch (Exception e) {
@@ -205,7 +203,7 @@ public class ManagementHttpServer {
 				String node_name=resource_path[1];
 				String body=new String(req_handle.getRequest().getBody());
 				System.out.println("DEBUG: processPost(): "+node_name+": cmd "+body);
-				String[] cmd=JsonUtils.fromJson(body,CommandInfo.class).getArgs();
+				String[] cmd=Json.fromJSON(body,CommandInfo.class).getArgs();
 				String command=cmd[0];
 				if (!command.equals("ip") && !command.equals("curl") && !command.equals("netstat") && !command.equals("top")) {
 					req_handle.setResponseCode(404);
@@ -249,21 +247,21 @@ public class ManagementHttpServer {
 	
 	private boolean processGetNetwork(String[] resource_path, Parameter[] query_params, HttpRequestHandle req_handle) {
 		if (resource_path.length==2 && resource_path[1].equals("topology")) {
-			req_handle.setResponseBody(JsonUtils.toJson(new HyperGraphInfo(network.getNodes(),Arrays.asList(Links.getNames()))).getBytes());
+			req_handle.setResponseBody(Json.toJSON(new HyperGraphInfo(network.getNodes(),Arrays.asList(Links.getNames()))).getBytes());
 			req_handle.setResponseContentType("application/json");
 			req_handle.setResponseCode(200);
 			return true;			
 		}
 		// else
 		if (resource_path.length==2 && resource_path[1].equals("simple")) {
-			req_handle.setResponseBody(JsonUtils.toJson(new GraphInfo(network.getNodes(),Arrays.asList(Links.getNames()))).getBytes());
+			req_handle.setResponseBody(Json.toJSON(new GraphInfo(network.getNodes(),Arrays.asList(Links.getNames()))).getBytes());
 			req_handle.setResponseContentType("application/json");
 			req_handle.setResponseCode(200);
 			return true;								
 		}
 		// else
 		if (resource_path.length==2 && resource_path[1].equals("config")) {
-			req_handle.setResponseBody(JsonUtils.toJson(new ConfigNetworkInfo(network.getNodes())).getBytes());
+			req_handle.setResponseBody(Json.toJSON(new ConfigNetworkInfo(network.getNodes())).getBytes());
 			req_handle.setResponseContentType("application/json");
 			req_handle.setResponseCode(200);
 			return true;								
@@ -278,7 +276,7 @@ public class ManagementHttpServer {
 			ArrayList<String> addrs=IpAddressUtils.sort(network.getNodeNames(),Ip4Address.class);
 			String[] straddrs=new String[addrs.size()];
 			for (int i=0; i<straddrs.length; i++) straddrs[i]=addrs.get(i);
-			req_handle.setResponseBody(JsonUtils.toJson(straddrs).getBytes());
+			req_handle.setResponseBody(Json.toJSON(straddrs).getBytes());
 			req_handle.setResponseContentType("application/json");
 			req_handle.setResponseCode(200);
 			return true;
@@ -293,7 +291,7 @@ public class ManagementHttpServer {
 		// else
 		if (resource_path.length==2) {
 			// show node
-			req_handle.setResponseBody(JsonUtils.toJson(new NodeInfo(node)).getBytes());
+			req_handle.setResponseBody(Json.toJSON(new NodeInfo(node)).getBytes());
 			req_handle.setResponseContentType("application/json");
 			req_handle.setResponseCode(200);
 			return true;
@@ -304,7 +302,7 @@ public class ManagementHttpServer {
 				// network interfaces
 				ArrayList<NetInterfaceInfo> mng_interfaces=new ArrayList<>();
 				for (NetInterface<Ip4Address,Ip4Packet> ni : node.getIpStack().getIp4Layer().getAllInterfaces()) mng_interfaces.add(new NetInterfaceInfo(ni));
-				req_handle.setResponseBody(JsonUtils.toJson(mng_interfaces.toArray(new NetInterfaceInfo[0])).getBytes());
+				req_handle.setResponseBody(Json.toJSON(mng_interfaces.toArray(new NetInterfaceInfo[0])).getBytes());
 				req_handle.setResponseContentType("application/json");
 				req_handle.setResponseCode(200);
 				return true;
@@ -314,7 +312,7 @@ public class ManagementHttpServer {
 				RoutingTable<Ip4Address,Ip4Packet> rt=node.getIpStack().getIp4Layer().getRoutingTable();
 				ArrayList<RouteInfo> mng_routes=new ArrayList<>();
 				for (Route<Ip4Address,Ip4Packet> r : rt.getAll()) mng_routes.add(new RouteInfo(r));
-				req_handle.setResponseBody(JsonUtils.toJson(mng_routes.toArray(new RouteInfo[0])).getBytes());
+				req_handle.setResponseBody(Json.toJSON(mng_routes.toArray(new RouteInfo[0])).getBytes());
 				req_handle.setResponseContentType("application/json");
 				req_handle.setResponseCode(200);
 				return true;
@@ -345,7 +343,7 @@ public class ManagementHttpServer {
 				result.last_ttl=ping_client.getLastTTL();
 				result.total_time=ping_client.getTotalTime();
 				req_handle.setResponseContentType("application/json");
-				req_handle.setResponseBody(JsonUtils.toJson(result).getBytes());
+				req_handle.setResponseBody(Json.toJSON(result).getBytes());
 				req_handle.setResponseCode(200);
 				return true;
 			}
@@ -368,7 +366,7 @@ public class ManagementHttpServer {
 					}
 				}
 			}
-			req_handle.setResponseBody(JsonUtils.toJson(new MemoryInfo(unit)).getBytes());
+			req_handle.setResponseBody(Json.toJSON(new MemoryInfo(unit)).getBytes());
 			req_handle.setResponseContentType("application/json");
 			req_handle.setResponseCode(200);
 			return true;

@@ -20,12 +20,12 @@
 package java.net;
 
 
-import it.unipr.netsec.ipstack.stack.IpStack;
+import io.ipstack.net.stack.IpStack;
 
 
 /** UDP socket.
  */
-public class DatagramSocket extends it.unipr.netsec.ipstack.udp.DatagramSocket {
+public class DatagramSocket extends io.ipstack.net.udp.DatagramSocket {
 	
 	/** Static attribute for detecting the current implementation */
 	public static final String PROVIDER="ipstack";

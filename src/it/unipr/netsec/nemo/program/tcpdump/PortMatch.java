@@ -3,9 +3,9 @@ package it.unipr.netsec.nemo.program.tcpdump;
 
 import java.util.ArrayList;
 
-import it.unipr.netsec.ipstack.net.Packet;
-import it.unipr.netsec.ipstack.tcp.TcpPacket;
-import it.unipr.netsec.ipstack.udp.UdpPacket;
+import io.ipstack.net.packet.Packet;
+import io.ipstack.net.tcp.TcpPacket;
+import io.ipstack.net.udp.UdpPacket;
 
 
 public class PortMatch implements Match {

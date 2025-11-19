@@ -1,0 +1,51 @@
+package it.unipr.netsec.ipstack.socket;
+
+
+import java.net.SocketException;
+
+
+/** Creates {@link DatagramSocket} objects.
+ */
+public abstract class DatagramSocketFactory {
+	
+	/** Default factory */
+	private static DatagramSocketFactory FACTORY=null;
+
+	
+	/** Sets the default factory.
+	 * @param factory the new default factory  */
+	public static void setFactory(DatagramSocketFactory factory) {
+		FACTORY=factory;
+	}
+
+	/** Creates a new UDP socket using the default factory.
+	 * <p>
+	 * If the default factory is <i>null</i>, a {@link JavanetDatagramSocket} is created.
+	 * @return the new socket
+	 * @throws SocketException */
+	public static DatagramSocket getInstance() throws SocketException {
+		return FACTORY!=null? FACTORY.createDatagramSocket() : new JavanetDatagramSocket();
+	}
+
+	/** Creates a new UDP socket using the default factory.
+	 * <p>
+	 * If the default factory is <i>null</i>, a {@link JavanetDatagramSocket} is created.
+	 * @param port the UDP port
+	 * @return the new socket
+	 * @throws SocketException */
+	public static DatagramSocket getInstance(int port) throws SocketException {
+		return FACTORY!=null? FACTORY.createDatagramSocket(port) : new JavanetDatagramSocket(port);
+	}
+
+	/** Creates a new UDP socket. 
+	 * @return the new socket
+	 * @throws SocketException */
+	public abstract DatagramSocket createDatagramSocket() throws SocketException;
+
+	/** Creates a new UDP socket. 
+	 * @param port the UDP port
+	 * @return the new socket
+	 * @throws SocketException */
+	public abstract DatagramSocket createDatagramSocket(int port) throws SocketException;
+
+}

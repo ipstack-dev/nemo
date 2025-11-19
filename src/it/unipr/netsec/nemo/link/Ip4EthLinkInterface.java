@@ -20,8 +20,8 @@
 package it.unipr.netsec.nemo.link;
 
 
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4EthInterface;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4EthInterface;
 
 
 /** IPv4 interface attached to a {@link DataLink link}.

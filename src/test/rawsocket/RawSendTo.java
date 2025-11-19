@@ -20,16 +20,16 @@
 package test.rawsocket;
 
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.net.DataPacket;
-import it.unipr.netsec.rawsocket.*;
-
 import java.io.*;
 
 import org.zoolu.util.Flags;
+
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.packet.DataPacket;
+import io.ipstack.net.rawsocket.*;
 
 
 /** Program for sending raw IP packets.

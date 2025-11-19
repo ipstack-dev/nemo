@@ -3,8 +3,8 @@ package it.unipr.netsec.nemo.examples.p1;
 
 import java.util.ArrayList;
 
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.Node;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Node;
 import it.unipr.netsec.nemo.link.DataLink;
 import it.unipr.netsec.nemo.link.DataLinkInterface;
 

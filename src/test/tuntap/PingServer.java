@@ -20,20 +20,20 @@
 package test.tuntap;
 
 
-import it.unipr.netsec.ipstack.arp.ArpPacket;
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ethernet.EthPacket;
-import it.unipr.netsec.ipstack.icmp4.IcmpMessage;
-import it.unipr.netsec.ipstack.icmp4.message.IcmpEchoReplyMessage;
-import it.unipr.netsec.ipstack.icmp4.message.IcmpEchoRequestMessage;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.tuntap.TunPacket;
-import it.unipr.netsec.tuntap.TuntapSocket;
-
 import java.io.IOException;
 
 import org.zoolu.util.Flags;
+
+import io.ipstack.net.arp.ArpPacket;
+import io.ipstack.net.ethernet.EthAddress;
+import io.ipstack.net.ethernet.EthPacket;
+import io.ipstack.net.icmp4.IcmpMessage;
+import io.ipstack.net.icmp4.message.IcmpEchoReplyMessage;
+import io.ipstack.net.icmp4.message.IcmpEchoRequestMessage;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.tuntap.TunPacket;
+import io.ipstack.net.tuntap.TuntapSocket;
 
 
 /** ICMP server attached to a TUN/TAP interface.

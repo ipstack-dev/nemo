@@ -1,10 +1,10 @@
 package test.nemo.mngnetwork.info;
 
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.routing.Route;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.packet.Route;
 
 
 public class RouteInfo {

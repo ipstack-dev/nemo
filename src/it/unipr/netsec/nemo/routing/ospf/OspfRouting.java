@@ -19,13 +19,6 @@
 
 package it.unipr.netsec.nemo.routing.ospf;
 
-
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.Packet;
 import it.unipr.netsec.nemo.routing.LinkStateInfo;
 import it.unipr.netsec.nemo.routing.NetworkMap;
 import it.unipr.netsec.nemo.routing.ShortestPathAlgorithm;
@@ -37,10 +30,17 @@ import java.util.Arrays;
 import java.util.Hashtable;
 
 import org.zoolu.util.Clock;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
 import org.zoolu.util.Timer;
 import org.zoolu.util.TimerListener;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.Packet;
 
 
 /** Lite implementation of the OSPF protocol.
@@ -56,7 +56,7 @@ public class OspfRouting implements DynamicRouting {
 	
 	/** Prints a debug message. */
 	private void debug(String str) {
-		SystemUtils.log(LoggerLevel.DEBUG,OspfRouting.class.getSimpleName()+"["+node_addr+"]: "+str);
+		DefaultLogger.log(LoggerLevel.DEBUG,OspfRouting.class.getSimpleName()+"["+node_addr+"]: "+str);
 	}
 
 	

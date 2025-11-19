@@ -4,7 +4,7 @@ package it.unipr.netsec.nemo.program.tcpdump;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unipr.netsec.ipstack.net.Packet;
+import io.ipstack.net.packet.Packet;
 import it.unipr.netsec.nemo.util.expression.Or;
 
 

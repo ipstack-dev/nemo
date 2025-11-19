@@ -20,12 +20,13 @@
 package it.unipr.netsec.nemo.ip;
 
 
-import it.unipr.netsec.ipstack.ip4.IpAddress;
-import it.unipr.netsec.ipstack.ip4.IpPrefix;
-import it.unipr.netsec.ipstack.net.Packet;
 import it.unipr.netsec.nemo.link.DataLink;
 
 import java.util.ArrayList;
+
+import io.ipstack.net.ip4.IpAddress;
+import io.ipstack.net.ip4.IpPrefix;
+import io.ipstack.net.packet.Packet;
 
 
 /** An IP link.

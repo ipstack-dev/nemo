@@ -19,51 +19,48 @@
 
 package test.rawsocket;
 
-
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ethernet.EthLayer;
-import it.unipr.netsec.ipstack.icmp4.IcmpLayer;
-import it.unipr.netsec.ipstack.icmp4.IcmpLayerListener;
-import it.unipr.netsec.ipstack.icmp4.IcmpMessage;
-import it.unipr.netsec.ipstack.icmp4.message.IcmpEchoReplyMessage;
-import it.unipr.netsec.ipstack.icmp4.message.IcmpEchoRequestMessage;
-import it.unipr.netsec.ipstack.icmp6.Icmp6Layer;
-import it.unipr.netsec.ipstack.icmp6.Icmp6LayerListener;
-import it.unipr.netsec.ipstack.icmp6.Icmp6Message;
-import it.unipr.netsec.ipstack.icmp6.message.Icmp6EchoReplyMessage;
-import it.unipr.netsec.ipstack.icmp6.message.Icmp6EchoRequestMessage;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4EthInterface;
-import it.unipr.netsec.ipstack.ip4.Ip4Layer;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6AddressPrefix;
-import it.unipr.netsec.ipstack.ip6.Ip6EthInterface;
-import it.unipr.netsec.ipstack.ip6.Ip6Layer;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.rawsocket.ethernet.RawEthInterface;
-
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.Random;
 
-import org.zoolu.util.ArrayUtils;
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
+
+import io.ipstack.net.ethernet.EthAddress;
+import io.ipstack.net.ethernet.EthLayer;
+import io.ipstack.net.icmp4.IcmpLayer;
+import io.ipstack.net.icmp4.IcmpLayerListener;
+import io.ipstack.net.icmp4.IcmpMessage;
+import io.ipstack.net.icmp4.message.IcmpEchoReplyMessage;
+import io.ipstack.net.icmp4.message.IcmpEchoRequestMessage;
+import io.ipstack.net.icmp6.Icmp6Layer;
+import io.ipstack.net.icmp6.Icmp6LayerListener;
+import io.ipstack.net.icmp6.Icmp6Message;
+import io.ipstack.net.icmp6.message.Icmp6EchoReplyMessage;
+import io.ipstack.net.icmp6.message.Icmp6EchoRequestMessage;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4EthInterface;
+import io.ipstack.net.ip4.Ip4Layer;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6AddressPrefix;
+import io.ipstack.net.ip6.Ip6EthInterface;
+import io.ipstack.net.ip6.Ip6Layer;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.rawsocket.ethernet.RawEthInterface;
 
 
 /** PING client.
  * It sends ICMP Echo Request messages to a remote node and captures possible
  * ICMP Echo Reply messages.
  * <p>
- * It uses {@link it.unipr.netsec.rawsocket.ethernet.RawEthInterface} for sending
+ * It uses {@link io.ipstack.net.rawsocket.ethernet.RawEthInterface} for sending
  * and capturing ICMP over IP over Ethernet packets.
   */
 public class Ping {
@@ -172,7 +169,7 @@ public class Ping {
 			System.exit(0);
 		}
 		if (debug) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			RawEthInterface.DEBUG=true;
 			//ArpLayer.DEBUG=true;
 			//ArpClient.DEBUG=true;

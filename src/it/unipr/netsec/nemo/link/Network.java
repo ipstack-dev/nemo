@@ -6,10 +6,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.zoolu.util.json.JsonUtils;
+import org.zoolu.util.json.Json;
 
-import it.unipr.netsec.ipstack.link.Link;
-import it.unipr.netsec.ipstack.net.Node;
+import io.ipstack.net.link.Link;
+import io.ipstack.net.packet.Node;
 
 
 /** Generic network of nodes interconnected by links.
@@ -121,10 +121,10 @@ public class Network<N extends Node<?,?>, L extends Link<?,?>> {
 		StringBuffer sb=new StringBuffer();
 		sb.append('{');
 		sb.append("\"nodes\":");
-		sb.append(JsonUtils.toJson(nodes.keySet().toArray()));
+		sb.append(Json.toJSON(nodes.keySet().toArray()));
 		sb.append(',');
 		sb.append("\"links\":");		
-		sb.append(JsonUtils.toJson(links.keySet().toArray()));
+		sb.append(Json.toJSON(links.keySet().toArray()));
 		sb.append('}');
 		return sb.toString();
 	}

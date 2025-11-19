@@ -19,30 +19,30 @@
 
 package test;
 
-
 import it.unipr.netsec.nemo.ip.Ip4Router;
 import it.unipr.netsec.nemo.ip.IpLink;
 import it.unipr.netsec.nemo.link.DataLink;
 import it.unipr.netsec.nemo.link.DataLinkInterface;
-import it.unipr.netsec.ipstack.icmp4.PingClient;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4EthInterface;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.ip4.IpPrefix;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.Node;
-import it.unipr.netsec.ipstack.ip4.Ip4Layer;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.routing.Route;
-import it.unipr.netsec.ipstack.routing.RoutingTable;
-import it.unipr.netsec.ipstack.udp.UdpLayer;
-import it.unipr.netsec.ipstack.util.IpAddressUtils;
 
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
+
+import io.ipstack.net.icmp4.PingClient;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4EthInterface;
+import io.ipstack.net.ip4.Ip4Layer;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.ip4.IpPrefix;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Node;
+import io.ipstack.net.packet.Route;
+import io.ipstack.net.packet.RoutingTable;
+import io.ipstack.net.udp.UdpLayer;
+import io.ipstack.net.util.IpAddressUtils;
 
 
 /** Routing in IPv4 network with linear topology and unnumbered router interfaces.
@@ -129,7 +129,7 @@ public class UnnumberedRoutingTest {
 		verbose=true;
 
 		if (verbose) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			DataLink.DEBUG=true;
 			//DataLinkInterface.DEBUG=true;
 			//Ip4Link.DEBUG=true;

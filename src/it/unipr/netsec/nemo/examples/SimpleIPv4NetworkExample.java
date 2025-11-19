@@ -1,9 +1,9 @@
 package it.unipr.netsec.nemo.examples;
 
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
 import it.unipr.netsec.nemo.ip.Ip4Host;
 import it.unipr.netsec.nemo.ip.Ip4Router;
 import it.unipr.netsec.nemo.ip.IpLink;

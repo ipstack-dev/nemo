@@ -19,12 +19,8 @@
 
 package it.unipr.netsec.nemo.routing.sdn;
 
-
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.Packet;
 import it.unipr.netsec.nemo.routing.LinkStateInfo;
 import it.unipr.netsec.nemo.routing.NetworkMap;
-import it.unipr.netsec.nemo.routing.RouteInfo;
 import it.unipr.netsec.nemo.routing.ShortestPathAlgorithm;
 import it.unipr.netsec.nemo.routing.DynamicRouting;
 import it.unipr.netsec.nemo.routing.DynamicRoutingInterface;
@@ -32,8 +28,11 @@ import it.unipr.netsec.nemo.routing.graph.Graph;
 
 import java.util.Hashtable;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.Packet;
 
 
 /** Centralized implementation of a SPF (Shortest Path First) algorithm.
@@ -48,7 +47,7 @@ public class SdnRouting implements DynamicRouting {
 	
 	/** Prints a debug message. */
 	private static void debug(String str) {
-		SystemUtils.log(LoggerLevel.DEBUG,SdnRouting.class,str);
+		DefaultLogger.log(LoggerLevel.DEBUG,SdnRouting.class,str);
 	}
 
 	

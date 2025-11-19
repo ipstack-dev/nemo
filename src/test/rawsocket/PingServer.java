@@ -19,22 +19,6 @@
 
 package test.rawsocket;
 
-
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ethernet.EthLayer;
-import it.unipr.netsec.ipstack.icmp4.IcmpLayer;
-import it.unipr.netsec.ipstack.icmp6.Icmp6Layer;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4EthInterface;
-import it.unipr.netsec.ipstack.ip4.Ip4Layer;
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6AddressPrefix;
-import it.unipr.netsec.ipstack.ip6.Ip6EthInterface;
-import it.unipr.netsec.ipstack.ip6.Ip6Layer;
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.rawsocket.ethernet.RawEthInterface;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
@@ -43,16 +27,31 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
+
+import io.ipstack.net.ethernet.EthAddress;
+import io.ipstack.net.ethernet.EthLayer;
+import io.ipstack.net.icmp4.IcmpLayer;
+import io.ipstack.net.icmp6.Icmp6Layer;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4EthInterface;
+import io.ipstack.net.ip4.Ip4Layer;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6AddressPrefix;
+import io.ipstack.net.ip6.Ip6EthInterface;
+import io.ipstack.net.ip6.Ip6Layer;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.rawsocket.ethernet.RawEthInterface;
 
 
 /** PING server.
  * It receives ICMP Echo Request messages and properly responds with
  * ICMP Echo Reply messages.
  * <p>
- * It uses {@link it.unipr.netsec.rawsocket.ethernet.RawEthInterface} for capturing
+ * It uses {@link io.ipstack.net.rawsocket.ethernet.RawEthInterface} for capturing
  * and sending ICMP over IP over Ethernet packets.
   */
 public abstract class PingServer {
@@ -81,7 +80,7 @@ public abstract class PingServer {
 			System.exit(0);
 		}
 		if (debug) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			RawEthInterface.DEBUG=true;
 			//ArpClient.DEBUG=true;
 			//ArpServer.DEBUG=true;

@@ -1,10 +1,9 @@
 package it.unipr.netsec.nemo.dhcp;
 
-
-import org.zoolu.util.Logger;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.Logger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
 
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -52,7 +51,7 @@ public class DhcpAdv extends Thread {
 		server_addr=stack.server_address;
 		nai=stack.nai;
 		timeout=stack.adv_time;
-		messagelog=new LoggerWriter(stack.log_path+"//server-adv-"+stack.server_port+".log",LoggerLevel.INFO); 
+		messagelog=new WriterLogger(stack.log_path+"//server-adv-"+stack.server_port+".log",LoggerLevel.INFO); 
 	}
 	
 	/** Whether the server is active */
@@ -68,7 +67,7 @@ public class DhcpAdv extends Thread {
 	/** Stops the server */
 	public void halt() {
 		stop=true;
-	 SystemUtils.getDefaultLogger().log(LoggerLevel.INFO,getClass(),"Halting MHCP_ADV server...");
+	 DefaultLogger.log(LoggerLevel.INFO,getClass(),"Halting MHCP_ADV server...");
 	}
 	
 	/** The main method, invoked by the run() thread */
@@ -96,7 +95,7 @@ public class DhcpAdv extends Thread {
 
 	/** Logs a textual message */
 	private void printlog(String str) {
-		SystemUtils.getDefaultLogger().log(LoggerLevel.INFO,getClass(),str);
+		DefaultLogger.log(LoggerLevel.INFO,getClass(),str);
 	}
 
 	/** Logs a DHCP message */

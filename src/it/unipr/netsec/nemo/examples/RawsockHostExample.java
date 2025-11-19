@@ -3,12 +3,12 @@ package it.unipr.netsec.nemo.examples;
 
 import java.net.SocketException;
 
-import it.unipr.netsec.ipstack.ethernet.EthLayer;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4EthInterface;
+import io.ipstack.net.ethernet.EthLayer;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4EthInterface;
+import io.ipstack.net.rawsocket.ethernet.RawEthInterface;
 import it.unipr.netsec.nemo.ip.Ip4Host;
-import it.unipr.netsec.rawsocket.ethernet.RawEthInterface;
 
 
 public class RawsockHostExample {

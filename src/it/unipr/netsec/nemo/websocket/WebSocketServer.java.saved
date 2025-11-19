@@ -1,0 +1,193 @@
+package it.unipr.netsec.nemo.websocket;
+
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.MessageDigest;
+
+import it.unipr.netsec.ipstack.ip4.SocketAddress;
+import it.unipr.netsec.ipstack.socket.JavanetServerSocket;
+import it.unipr.netsec.ipstack.socket.ServerSocket;
+import it.unipr.netsec.ipstack.socket.Socket;
+import it.unipr.netsec.ipstack.tcp.TcpLayer;
+import it.unipr.netsec.nemo.http.HttpRequest;
+import it.unipr.netsec.nemo.http.HttpRequestHandle;
+import it.unipr.netsec.nemo.http.HttpRequestURL;
+import it.unipr.netsec.nemo.http.HttpResponse;
+
+import java.util.HashMap;
+
+import org.zoolu.util.Base64;
+import org.zoolu.util.LoggerLevel;
+import org.zoolu.util.SystemUtils;
+
+import static org.zoolu.util.LoggerLevel.*;
+
+
+/** WebSocket server.
+ * It listens for new WebSocket connections.
+ */
+public class WebSocketServer {
+	
+	/** Verbose mode */
+	public static boolean VERBOSE= false;
+
+	/** Logs a message. */
+	private void log(LoggerLevel level, String str) {
+		SystemUtils.log(level,null,toString()+": "+str);
+	}
+
+	
+	/** Server socket */
+	ServerSocket serverSocket;
+
+	/** Server listener */
+	WebsocketServerListener listener;
+	
+	/** Whether it is running */
+	boolean running= true;
+	
+	
+	/** Creates a new HTTP server.
+	 * @param tcp_layer TCP layer
+	 * @param server_port server port
+	 * @param listener server listener that handles HTTP requests
+	 * @throws IOException */
+	public WebSocketServer(TcpLayer tcp_layer, int server_port, WebsocketServerListener listener) throws IOException {
+		serverSocket= new it.unipr.netsec.ipstack.tcp.ServerSocket(tcp_layer,server_port);
+		this.listener= listener;
+		start();
+	}
+	
+	
+	/** Creates a new HTTP server.
+	 * @param server_port server port
+	 * @param listener server listener that handles HTTP requests
+	 * @throws IOException */
+	public WebSocketServer(int server_port, WebsocketServerListener listener) throws IOException {
+		serverSocket= new JavanetServerSocket(new java.net.ServerSocket(server_port));
+		this.listener= listener;
+		start();
+	}
+	
+	
+	/** Starts the server. */
+	private void start() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				serve();
+			}
+		}).start();
+	}
+	
+	
+	/** Starts the server. */
+	private void serve() {
+		try {
+			if (VERBOSE) log(INFO,"serve(): start listening on port "+serverSocket.getLocalPort()); 
+			while (running) {
+				final Socket socket=serverSocket.accept();
+				if (VERBOSE) log(INFO,"serve(): connected from "+new SocketAddress(socket.getRemoteSocketAddress())); 
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							serve(new SocketAddress(socket.getRemoteSocketAddress()),socket.getInputStream(),socket.getOutputStream());
+							//socket.close();	
+						}
+						catch (IOException e) {
+							//e.printStackTrace();
+							if (VERBOSE) {
+								log(INFO,"IOException serving the connection: "+e.getMessage());
+								log(DEBUG,SystemUtils.toString(e.getStackTrace(),"\t",null,"\n"));
+							}
+						}		
+					}				
+				}).start();
+			}
+		}
+		catch (Exception e) {
+			// general Exception is captured in place of IOException, for safety
+			//e.printStackTrace();
+			log(INFO,"serve(): Exception: "+e.getMessage());
+			log(DEBUG,SystemUtils.toString(e.getStackTrace(),"\t",null,"\n"));
+		}
+		log(INFO,"serve(): terminated");
+	}
+	
+	
+	/** Handles a new TCP connection.
+	 * @param client socket address
+	 * @param is the TCP input stream
+	 * @param os the TCP output stream
+	 * @throws IOException */
+	private void serve(SocketAddress client_soaddr, InputStream is, OutputStream os) throws IOException {
+		// request
+		HttpRequest req=HttpRequest.parseHttpRequest(is);
+		if (VERBOSE) log(DEBUG,"Request: "+req+"-----End-of-message-----");
+		HttpRequestHandle req_handle=new HttpRequestHandle(req,client_soaddr);		
+		try {
+			String method= req_handle.getMethod();
+			if (method.equals(HttpRequest.OPTIONS)) {
+				req_handle.setResponseCode(200);
+				req_handle.setResponseHeaderField("Allow",HttpRequest.GET+","+HttpRequest.OPTIONS);
+			}
+			else
+			if (method.equals(HttpRequest.GET)) {
+				HttpRequestURL request_url= req_handle.getRequestURL();
+				String resource= request_url.getAbsPath();
+				
+				String wsKey= req_handle.getRequest().getHeaderField("Sec-WebSocket-Key");
+				if (wsKey==null) throw new IOException("Sec-WebSocket-Key header field is missed");
+				req_handle.setResponseCode(101);
+				HashMap<String,String> hdr= req_handle.getResponseHeaderFields();
+				hdr.put("Connection","Upgrade");
+				hdr.put("Upgrade","websocket");
+				String wsAccept= Base64.encode(MessageDigest.getInstance("SHA-1").digest((wsKey+WebsocketFrame.WS_UUID).getBytes()));
+				hdr.put("Sec-WebSocket-Accept",wsAccept);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			req_handle.setResponseCode(400);
+		}
+		// response
+		HashMap<String,String> hdr=req_handle.getResponseHeaderFields();
+		HttpResponse resp=new HttpResponse(req_handle.getResponseCode(),hdr,req_handle.getResponseBody());
+		if (VERBOSE) log(DEBUG,"Response: "+resp+"-----End-of-message-----");
+		os.write(resp.getBytes());
+		os.flush();
+		if (resp.getStatusCode()==101) listener.handleWebsocket(new Websocket(is,os,false));
+		else {
+			is.close();
+			os.close();
+		}
+	}
+	
+	
+	/** Stops the server. */
+	public void close() {
+		if (!running) return;
+		running=false;
+		try {
+			serverSocket.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}	
+	
+	
+	@Override
+	public String toString() {
+		String local;
+		TcpLayer tcp_layer=serverSocket.getTcpLayer();
+		if (tcp_layer!=null) local=""+tcp_layer.getIpLayer().getAddress()+':'+serverSocket.getLocalPort();
+		else local=""+serverSocket.getLocalPort();
+		return WebsocketServerWithListener.class.getSimpleName()+'['+local+']';
+	}
+
+
+}

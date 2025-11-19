@@ -5,25 +5,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.zoolu.util.json.JsonUtils;
+import org.zoolu.util.json.Json;
 
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.link.Link;
-import it.unipr.netsec.ipstack.link.LinkInterface;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.routing.Route;
-import it.unipr.netsec.ipstack.routing.RoutingTable;
-import it.unipr.netsec.ipstack.stack.Links;
+import io.ipstack.net.ethernet.EthAddress;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.link.Link;
+import io.ipstack.net.link.LinkInterface;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Route;
+import io.ipstack.net.packet.RoutingTable;
+import io.ipstack.net.stack.Links;
+import io.ipstack.net.tuntap.Ip4TuntapInterface;
+import io.ipstack.net.tuntap.TuntapSocket;
 import it.unipr.netsec.nemo.ip.Ip4Host;
 import it.unipr.netsec.nemo.ip.Ip4Node;
 import it.unipr.netsec.nemo.ip.Ip4Router;
 import it.unipr.netsec.nemo.link.Network;
-import it.unipr.netsec.tuntap.Ip4TuntapInterface;
-import it.unipr.netsec.tuntap.TuntapSocket;
 import test.nemo.mngnetwork.info.ConfigInterfaceInfo;
 import test.nemo.mngnetwork.info.ConfigNetworkInfo;
 import test.nemo.mngnetwork.info.ConfigNodeInfo;
@@ -46,7 +46,7 @@ public class TestNetworkFactory {
 			HashMap<String,String> saved_auth_db0=auth_db0;
 			@Override
 			public void rebuild(String cfg_json) {
-				if (cfg_json!=null) JsonUtils.fromJson(cfg_json,saved_cfg);
+				if (cfg_json!=null) Json.fromJSON(cfg_json,saved_cfg);
 				clear();
 				build(this,saved_gw_link,saved_auth_db0,saved_cfg);
 			}
@@ -61,7 +61,7 @@ public class TestNetworkFactory {
 	}
 
 	private static void build(Network<Ip4Node,Link<Ip4Address,Ip4Packet>> network, Link<Ip4Address,Ip4Packet> gw_link, HashMap<String,String> auth_db0, TestNetworkInfo cfg) {		
-		System.out.println(TestNetworkFactory.class.getSimpleName()+": build(): "+JsonUtils.toJson(cfg));
+		System.out.println(TestNetworkFactory.class.getSimpleName()+": build(): "+Json.toJSON(cfg));
 		Link<Ip4Address,Ip4Packet> link0=new Link<>();
 		Links.putLink("link-0",link0);
 		if (gw_link!=null) {
@@ -152,7 +152,7 @@ public class TestNetworkFactory {
 			@Override
 			public void rebuild(String cfg) {
 				if (cfg!=null) {
-					ConfigNetworkInfo aux=JsonUtils.fromJson(cfg,ConfigNetworkInfo.class);
+					ConfigNetworkInfo aux=Json.fromJSON(cfg,ConfigNetworkInfo.class);
 					if (aux.nodes!=null) last_network_info=aux;
 				}
 				clear();

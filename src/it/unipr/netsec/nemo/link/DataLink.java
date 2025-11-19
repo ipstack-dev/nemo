@@ -19,17 +19,16 @@
 
 package it.unipr.netsec.nemo.link;
 
-
 import org.zoolu.util.Clock;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
 import org.zoolu.util.Timer;
 import org.zoolu.util.TimerListener;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
-import it.unipr.netsec.ipstack.link.LinkInterface;
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.Packet;
+import io.ipstack.net.link.LinkInterface;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Packet;
 
 
 /** A generic one-to-many link with a finite bit-rate and a given propagation medium_delay.
@@ -38,11 +37,11 @@ import it.unipr.netsec.ipstack.net.Packet;
  * <p>
  * If the propagation delay is greater than zero, the packet is delayed accordingly, before being passed to the target interface.
  */
-public class DataLink<A extends Address, P extends Packet<A>> extends it.unipr.netsec.ipstack.link.Link<A,P> {
+public class DataLink<A extends Address, P extends Packet<A>> extends io.ipstack.net.link.Link<A,P> {
 
 	/** Prints a debug message. */
 	private void debug(String str) {
-		SystemUtils.log(LoggerLevel.DEBUG,DataLink.class,str);
+		DefaultLogger.log(LoggerLevel.DEBUG,DataLink.class,str);
 	}
 
 	

@@ -19,30 +19,31 @@
 
 package test.ipstack;
 
-
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4Layer;
-import it.unipr.netsec.ipstack.ip4.Ip4Node;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.nat.SDestNAT;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.Node;
-import it.unipr.netsec.tuntap.Ip4TunInterface;
-import it.unipr.netsec.tuntap.Ip4TuntapInterface;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
+
+import io.ipstack.net.analyzer.LibpcapHeader;
+import io.ipstack.net.analyzer.LibpcapSniffer;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4Layer;
+import io.ipstack.net.ip4.Ip4Node;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.nat.SDestNAT;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Node;
+import io.ipstack.net.tuntap.Ip4TunInterface;
+import io.ipstack.net.tuntap.Ip4TuntapInterface;
 
 
 /** S-D-NAT node, attached to TUN/TAP interfaces.
  * <p>
- * See {@link it.unipr.netsec.ipstack.nat.SDestNAT} for a description of how it works.
+ * See {@link io.ipstack.net.nat.SDestNAT} for a description of how it works.
  * <p>
  * The NAT table entries must be explicitly set through command-line option <code>-a in-daddr out-saddr out-daddr</code>.
  */
@@ -51,48 +52,62 @@ public abstract class TunNAT {
 	
 	/** The main method. */
 	public static void main(String[] args) throws IOException {
-		Flags flags=new Flags(args);
-		boolean DEBUG=flags.getBoolean("-debug","debug mode");
-		boolean VERBOSE=flags.getBoolean("-v","verbose mode");
-		boolean help=flags.getBoolean("-h","prints this message");
-		//final double err=flags.getDouble("-e","<PER>",0.0,"adds packet error rate, just for testing purpose");
-		ArrayList<NetInterface<Ip4Address,Ip4Packet>> tuntap=new ArrayList<>();
-		String[] tuntap_param=flags.getStringTuple("-i",2,null,"<tun> <ipaddr/prefix>","TUN/TAP interface and IPv4 address/prefix length (e.g. '-i tun0 10.1.1.3/24')") ;
+		Flags flags= new Flags(args);
+		boolean DEBUG= flags.getBoolean("-debug","debug mode");
+		boolean VERBOSE= flags.getBoolean("-v","verbose mode");
+		boolean help= flags.getBoolean("-h","prints this message");
+		//final double err= flags.getDouble("-e","<PER>",0.0,"adds packet error rate, just for testing purpose");
+		String pcapFile= flags.getString("-pcap",null,"file","captures packets on the monitor port and writes them to a pcap file");
+		LibpcapSniffer sniffer= null;
+		ArrayList<NetInterface<Ip4Address,Ip4Packet>> tuntap= new ArrayList<>();
+		String[] tuntap_param= flags.getStringTuple("-i",2,null,"<tun> <ipaddr/prefix>","TUN/TAP interface and IPv4 address/prefix length (e.g. '-i tun0 10.1.1.3/24')") ;
 		while (tuntap_param!=null) {
-			Ip4TuntapInterface ni=new Ip4TuntapInterface(tuntap_param[0],new Ip4AddressPrefix(tuntap_param[1]));
+			Ip4TuntapInterface ni= new Ip4TuntapInterface(tuntap_param[0],new Ip4AddressPrefix(tuntap_param[1]));
 			tuntap.add(ni);
-			tuntap_param=flags.getStringTuple("-i",2,null,null,null);
+			if (pcapFile!=null && sniffer==null) sniffer= new LibpcapSniffer(ni,LibpcapHeader.LINKTYPE_IPV4,pcapFile);
+			tuntap_param= flags.getStringTuple("-i",2,null,null,null);
 		}
 		if (tuntap.size()==0) {
 			System.out.println(TunNAT.class.getSimpleName()+": At least one TUN/TAP interface has to be configured");
 			help=true;
 		}
-		ArrayList<String[]> nat_mappings=new ArrayList<String[]>();
-		String[] nat_param=flags.getStringTuple("-a",3,null,"<in-daddr> <out-saddr> <out-daddr>","adds a new mapping formed by in-daddr, out-saddr, and out-daddr") ;
-		while (nat_param!=null) {
-			nat_mappings.add(nat_param);
-			nat_param=flags.getStringTuple("-a",3,null,null,null);
+		ArrayList<Ip4Address[]> nat_table= new ArrayList<>();
+		String[] addr_tuple= flags.getStringTuple("-a",3,null,"<in-daddr> <out-saddr> <out-daddr>","adds a new mapping formed by in-daddr, out-saddr, and out-daddr") ;
+		while (addr_tuple!=null) {
+			Ip4Address[] ipaddr_tuple= new Ip4Address[3];
+			for (int i=0; i<3; i++) ipaddr_tuple[i]= new Ip4Address(addr_tuple[i]);
+			nat_table.add(ipaddr_tuple);
+			addr_tuple= flags.getStringTuple("-a",3,null,null,null);
 		}
+		
 		if (help) {
 			System.out.println(flags.toUsageString(TunNAT.class.getSimpleName()));
 			System.exit(0);					
 		}	
 		if (DEBUG) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
-			Ip4TunInterface.DEBUG=true;
-			Node.DEBUG=true;
-			Ip4Node.DEBUG=true;
-			Ip4Layer.DEBUG=true;							
-			SDestNAT.DEBUG=true;
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
+			Ip4TunInterface.DEBUG= true;
+			Node.DEBUG= true;
+			Ip4Node.DEBUG= true;
+			Ip4Layer.DEBUG= true;							
+			SDestNAT.DEBUG= true;
 		}
 		if (VERBOSE) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
-			SDestNAT.DEBUG=true;
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
+			SDestNAT.DEBUG= true;
 		}
 		
-		SDestNAT nat=new SDestNAT(tuntap);
-		for (String[] nat_map : nat_mappings) {
-			nat.add(new Ip4Address(nat_map[0]),new Ip4Address(nat_map[1]),new Ip4Address(nat_map[2]));
+//		final LibpcapWriter writer= pcapFile!=null? new LibpcapWriter(LibpcapHeader.LINKTYPE_IPV4,pcapFile) : null;
+//		SDestNAT nat= new SDestNAT(tuntap) {
+//			@Override
+//			protected void processReceivedPacket(NetInterface<Ip4Address,Ip4Packet> ni, Ip4Packet ip_pkt) {
+//				if (writer!=null) writer.write(ip_pkt);
+//				super.processReceivedPacket(ni,ip_pkt);
+//			}
+//		};
+		SDestNAT nat= new SDestNAT(tuntap);
+		for (Ip4Address[] ipaddr_tuple : nat_table) {
+			nat.add(ipaddr_tuple[0],ipaddr_tuple[1],ipaddr_tuple[2]);
 		}
 	}
 	

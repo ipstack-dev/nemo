@@ -27,18 +27,6 @@ import it.unipr.netsec.nemo.link.DataLink;
 import it.unipr.netsec.nemo.link.Network;
 import it.unipr.netsec.nemo.link.TopologyBuilder;
 import it.unipr.netsec.nemo.link.PacketGenerator;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.ip4.IpAddress;
-import it.unipr.netsec.ipstack.ip4.IpPrefix;
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6Prefix;
-import it.unipr.netsec.ipstack.net.Node;
-import it.unipr.netsec.ipstack.net.Packet;
-import it.unipr.netsec.ipstack.routing.RoutingTable;
-import it.unipr.netsec.ipstack.udp.UdpPacket;
-import it.unipr.netsec.ipstack.util.IpAddressUtils;
 import it.unipr.netsec.simulator.scheduler.VirtualClock;
 
 import java.util.ArrayList;
@@ -47,9 +35,23 @@ import java.util.Collection;
 import org.zoolu.util.Clock;
 import org.zoolu.util.DateFormat;
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
 import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
+
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.ip4.IpAddress;
+import io.ipstack.net.ip4.IpPrefix;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6Prefix;
+import io.ipstack.net.packet.Node;
+import io.ipstack.net.packet.Packet;
+import io.ipstack.net.packet.RoutingTable;
+import io.ipstack.net.udp.UdpPacket;
+import io.ipstack.net.util.IpAddressUtils;
 
 
 /** Routing in IPv4 or IPv6 network with different topologies (Manhattan, tree, etc.).
@@ -191,7 +193,7 @@ public class RoutingTest {
 		PAUSE=flags.getBoolean("-pause","pauses after each run");
 		
 		if (VERBOSE) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			DataLink.DEBUG=true;
 			Node.DEBUG=true;
 		}

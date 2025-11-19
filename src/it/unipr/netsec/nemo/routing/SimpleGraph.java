@@ -1,11 +1,10 @@
 package it.unipr.netsec.nemo.routing;
 
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
 import it.unipr.netsec.nemo.routing.graph.Edge;
 import it.unipr.netsec.nemo.routing.graph.Graph;
@@ -24,7 +23,7 @@ class SimpleGraph {
 	
 	/** Prints a debug message. */
 	private static void debug(String str) {
-		SystemUtils.log(LoggerLevel.DEBUG,SimpleGraph.class,str);
+		DefaultLogger.log(LoggerLevel.DEBUG,SimpleGraph.class,str);
 	}
 
 	

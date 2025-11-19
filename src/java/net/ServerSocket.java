@@ -20,14 +20,14 @@
 package java.net;
 
 
-import it.unipr.netsec.ipstack.stack.IpStack;
-
 import java.io.IOException;
+
+import io.ipstack.net.stack.IpStack;
 
 
 /** Server socket.
  */
-public class ServerSocket extends it.unipr.netsec.ipstack.tcp.ServerSocket {
+public class ServerSocket extends io.ipstack.net.tcp.ServerSocket {
 
 	/** Creates an unbound server socket. */
 	public ServerSocket() throws IOException {

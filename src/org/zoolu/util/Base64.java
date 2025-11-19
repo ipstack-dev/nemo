@@ -22,9 +22,7 @@ package org.zoolu.util;
 
 
 
-/** Base64 encoder and decoder.
-  * It can be used for base64-encoding a byte array and/or
-  * for base64-decoding a base64 string.
+/** Fast implementation of Base64 encoder and decoder.
   * <p>
   * This implementation is faster than the one provided by Sun
   * through classes sun.misc.BASE64Encoder and sun.misc.BASE64Decoder.
@@ -61,17 +59,17 @@ public class Base64 {
 
 
 	/** Encodes in base64 a given array of bytes.
-	 * @param input the input byte array
+	 * @param data the input byte array
 	 * @return the base64 string */
-	public static String encode(byte[] input) {
+	public static String encode(byte[] data) {
 		
 		StringBuffer sb=new StringBuffer();
 
-		int len_floor3=((input.length)/3)*3;
+		int len_floor3=((data.length)/3)*3;
 		for (int i=0; i<len_floor3; ) {
-			byte bin0=input[i++];
-			byte bin1=input[i++];
-			byte bin2=input[i++];
+			byte bin0=data[i++];
+			byte bin1=data[i++];
+			byte bin2=data[i++];
 			int ch0=((bin0>>>2)&0x3F);
 			int ch1=((bin0&0x3)<<4) + ((bin1>>>4)&0xF);
 			int ch2=((bin1&0xF)<<2) + ((bin2>>>6)&0x3);
@@ -79,17 +77,17 @@ public class Base64 {
 			sb.append(B64CHARS.charAt(ch0)).append(B64CHARS.charAt(ch1)).append(B64CHARS.charAt(ch2)).append(B64CHARS.charAt(ch3));
 		} 
 	
-		int len_mod3=(input.length)%3;
+		int len_mod3=(data.length)%3;
 		if (len_mod3==1) {
-			byte bin0=input[len_floor3];
+			byte bin0=data[len_floor3];
 			int ch0=((bin0>>>2)&0x3F);
 			int ch1=(bin0&0x3)<<4;        
 			sb.append(B64CHARS.charAt(ch0)).append(B64CHARS.charAt(ch1)).append("==");
 		}
 		else 
 		if (len_mod3==2) {
-			byte bin0=input[len_floor3];
-			byte bin1=input[len_floor3+1];
+			byte bin0=data[len_floor3];
+			byte bin1=data[len_floor3+1];
 			int ch0=((bin0>>>2)&0x3F);
 			int ch1=((bin0&0x3)<<4) + ((bin1>>>4)&0xF);
 			int ch2=((bin1&0xF)<<2);     
@@ -134,10 +132,10 @@ public class Base64 {
 
 
   /** Decodes a given base64 string.
-   * @param str64 the base64 string
+   * @param base64 the base64 string
    * @return the decoded byte array */
-	public static byte[] decode(String str64) {
-		if ((str64.length()/4)*4!=str64.length()) return null;
+	public static byte[] decode(String base64) {
+		if ((base64.length()/4)*4!=base64.length()) return null;
 		// else
 		/*int str_len=str64.length();
 		if (str64.charAt(str_len-1)=='=') str_len--;
@@ -150,18 +148,18 @@ public class Base64 {
 		byte[] output=new byte[len_floor3+len_mod3];    
 		*/
 		int pad_len=0;
-		while (str64.charAt(str64.length()-1-pad_len)=='=') pad_len++;
-		int str_len_floor4=((str64.length()-pad_len)/4)*4;
+		while (base64.charAt(base64.length()-1-pad_len)=='=') pad_len++;
+		int str_len_floor4=((base64.length()-pad_len)/4)*4;
 		int len_floor3=((str_len_floor4)/4)*3;
 		int len_mod3=(3-pad_len)%3;
 		byte[] output=new byte[len_floor3+len_mod3];
 		
 		int k=0;
 		for (int i=0; i<str_len_floor4; ) {
-			int ch0=charToInt(str64.charAt(i++));
-			int ch1=charToInt(str64.charAt(i++));
-			int ch2=charToInt(str64.charAt(i++));
-			int ch3=charToInt(str64.charAt(i++)); 
+			int ch0=charToInt(base64.charAt(i++));
+			int ch1=charToInt(base64.charAt(i++));
+			int ch2=charToInt(base64.charAt(i++));
+			int ch3=charToInt(base64.charAt(i++)); 
 			int bin0=(ch0<<2) + (ch1>>>4);
 			int bin1=(ch1%16<<4) + (ch2>>>2);
 			int bin2=(ch2%4<<6) + ch3;  
@@ -171,16 +169,16 @@ public class Base64 {
 		}
 		
 		if (len_mod3==1) {
-			int ch0=charToInt(str64.charAt(str_len_floor4));
-			int ch1=charToInt(str64.charAt(str_len_floor4+1));
+			int ch0=charToInt(base64.charAt(str_len_floor4));
+			int ch1=charToInt(base64.charAt(str_len_floor4+1));
   	      int bin0=(ch0<<2) + (ch1>>>4);
 			output[len_floor3]=(byte)bin0;           
 	   }
 	   else 
 		if (len_mod3==2) {
-			int ch0=charToInt(str64.charAt(str_len_floor4));
-			int ch1=charToInt(str64.charAt(str_len_floor4+1));
-			int ch2=charToInt(str64.charAt(str_len_floor4+2));
+			int ch0=charToInt(base64.charAt(str_len_floor4));
+			int ch1=charToInt(base64.charAt(str_len_floor4+1));
+			int ch2=charToInt(base64.charAt(str_len_floor4+2));
 			int bin0=(ch0<<2) + (ch1>>>4);
 			int bin1=(ch1%16 <<4) + (ch2>>>2);
 			output[len_floor3]=(byte)bin0;

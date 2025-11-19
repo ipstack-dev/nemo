@@ -20,13 +20,12 @@
 
 package org.zoolu.util;
 
-
 import java.util.BitSet;
 
 
-/** Invariant string of bits.
+/** Immutable string of bits.
   * <p>
-  * For variable-length bit strings you can use {@link BitStringBuffer}.
+  * For variable-length strings of bits you can use {@link BitStringBuffer}.
   */
 public class BitString {
 	
@@ -55,7 +54,7 @@ public class BitString {
 
 
 	/** Creates a new bit string from an array of bytes.
-	  * @param buf the buffer containing the bit string. The most significant bit of each byte is taken first. */
+	  * @param buf the buffer containing the bit string. The most significant bit of each byte is taken first */
 	public BitString(byte[] buf) {
 		this(buf,false);
 	}
@@ -72,7 +71,7 @@ public class BitString {
 	/** Creates a new bit string from an array of bytes.
 	  * @param buf the buffer containing the bit string 
 	  * @param off the offset of the first byte within the buffer
-	  * @param len the total number of bytes. The most significant bit of each byte is taken first. */
+	  * @param len the total number of bytes. The most significant bit of each byte is taken first */
 	public BitString(byte[] buf, int off, int len) {
 		this(buf,off,len,false);
 	}
@@ -147,7 +146,8 @@ public class BitString {
 	}
 
 
-	/** Gets the array length. */
+	/** Gets the array length
+	  * @return the length */
 	public int length() {
 		return bits.length;
 	}
@@ -168,21 +168,28 @@ public class BitString {
 	}
 
 
-	/** Gets the <i>i</i>-th bit. */
+	/** Gets the <i>i</i>-th bit.
+	  * @param i the bit index
+	  * @return the bit value */
 	public boolean bitAt(int i) {
 		return bits[i];
 	}
 
 
-	/** Returns a new string that is a substring of this string.
-	  * The substring begins with the bit at the specified index <i>begin</i> and extends to the end of this string. */
+	/** Gets a new string that is a substring of this string.
+	  * The substring begins with the bit at the specified index <i>begin</i> and extends to the end of this string.
+	  * @param begin index of the beginning of the substring
+	  * @return the new string */
 	public BitString substring(int begin) {
 		return substring(begin,bits.length);
 	}
 
 
 	/** Returns a new string that is a substring of this string.
-	  * The substring begins at the specified index <i>begin</i> and extends to the bit at index <i>end</i> - 1. Thus the length of the substring is end-begin.*/
+	  * The substring begins at the specified index <i>begin</i> and extends to the bit at index <i>end</i> - 1. Thus the length of the substring is end-begin.
+	  * @param begin index of the beginning of the substring
+	  * @param end past-the-end index of the substring (i.e. index of the last bit + 1)
+	  * @return the new string */
 	public BitString substring(int begin, int end) {
 		BitString bs=new BitString(end-begin);
 		System.arraycopy(bits,begin,bs.bits,0,bs.bits.length);

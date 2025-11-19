@@ -3,8 +3,8 @@ package it.unipr.netsec.nemo.routing.ospf;
 
 import org.zoolu.util.Bytes;
 
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.util.IpAddressUtils;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.util.IpAddressUtils;
 
 
 /** LSA link field, describing a router link.

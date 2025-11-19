@@ -1,17 +1,17 @@
 package it.unipr.netsec.nemo.examples;
 
-
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.net.NetInterface;
 import it.unipr.netsec.nemo.ip.Ip4Router;
 import it.unipr.netsec.nemo.ip.IpLink;
 
 import java.util.ArrayList;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.packet.NetInterface;
 
 
 /** Example of an IPv4 packet filtering router.
@@ -26,7 +26,7 @@ public class FilteringRouter extends Ip4Router {
 
 	/** Prints a log message. */
 	private void printLog(String str) {
-		SystemUtils.log(LoggerLevel.INFO,FilteringRouter.class,str);
+		DefaultLogger.log(LoggerLevel.INFO,FilteringRouter.class,str);
 	}
 	
 	

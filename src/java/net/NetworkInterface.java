@@ -20,24 +20,24 @@
 package java.net;
 
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.IpAddress;
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6AddressPrefix;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.LoopbackInterface;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.stack.IpStack;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.IpAddress;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6AddressPrefix;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.LoopbackInterface;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.stack.IpStack;
 
 
 public final class NetworkInterface {
@@ -47,7 +47,7 @@ public final class NetworkInterface {
 	
 	/** Prints a debug message. */
 	private static void debug(String str) {
-		SystemUtils.log(LoggerLevel.DEBUG,NetworkInterface.class,str);
+		DefaultLogger.log(LoggerLevel.DEBUG,NetworkInterface.class,str);
 	}
 	
 	

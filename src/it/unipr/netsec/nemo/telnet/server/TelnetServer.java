@@ -1,22 +1,21 @@
 package it.unipr.netsec.nemo.telnet.server;
 
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
-import it.unipr.netsec.ipstack.socket.ServerSocket;
-import it.unipr.netsec.ipstack.socket.Socket;
+import io.ipstack.net.socket.JavanetServerSocket;
+import io.ipstack.net.socket.ServerSocket;
 import it.unipr.netsec.nemo.ip.Ip4Node;
 import it.unipr.netsec.nemo.telnet.Telnet;
 import it.unipr.netsec.nemo.telnet.TelnetListener;
 
 
-/** TELNET server on IP node.
- * It supports some Linux-like network configuration and diagnostic tools such as <b>ip</b> and <b>ping</b> commands.
+/** TELNET server running on an IP node.
+ * It supports Linux-like network configuration and diagnostic tools such as <b>ip</b> and <b>ping</b> commands.
  */
 public class TelnetServer {
 	
@@ -25,7 +24,7 @@ public class TelnetServer {
 
 	/** Logs a message. */
 	private void log(String str) {
-		SystemUtils.log(LoggerLevel.INFO,getClass(),str);
+		DefaultLogger.log(LoggerLevel.INFO,getClass(),str);
 	}
 	
 	
@@ -66,8 +65,8 @@ public class TelnetServer {
 		}
 		final Map<String,String> passwd_map=passwd_db;
 			
-		if (telent_on_ip_stack) socket_server=new ServerSocket(new it.unipr.netsec.ipstack.tcp.ServerSocket(ip_node.getIpStack().getTcpLayer(),port));
-		else socket_server=new ServerSocket(new java.net.ServerSocket(port));
+		if (telent_on_ip_stack) socket_server=new io.ipstack.net.tcp.ServerSocket(ip_node.getIpStack().getTcpLayer(),port);
+		else socket_server=new JavanetServerSocket(new java.net.ServerSocket(port));
 
 		new Thread(new Runnable() {
 			@Override

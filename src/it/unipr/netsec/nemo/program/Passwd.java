@@ -4,7 +4,7 @@ package it.unipr.netsec.nemo.program;
 import java.io.PrintStream;
 import java.util.Map;
 
-import it.unipr.netsec.ipstack.stack.IpStack;
+import io.ipstack.net.stack.IpStack;
 
 
 /** <i>tcpdump</i> command.

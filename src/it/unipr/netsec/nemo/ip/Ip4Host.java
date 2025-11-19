@@ -24,21 +24,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.DatagramPacket;
+import java.util.function.Consumer;
 
 import org.zoolu.util.ArrayUtils;
 import org.zoolu.util.Bytes;
 import org.zoolu.util.Random;
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.tcp.ServerSocket;
-import it.unipr.netsec.ipstack.tcp.Socket;
-import it.unipr.netsec.ipstack.udp.DatagramSocket;
-import it.unipr.netsec.nemo.http.HttpRequestHandle;
-import it.unipr.netsec.nemo.http.HttpServer;
-import it.unipr.netsec.nemo.http.HttpServerListener;
+import io.ipstack.http.HttpRequestHandle;
+import io.ipstack.http.HttpServer;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.tcp.ServerSocket;
+import io.ipstack.net.tcp.Socket;
+import io.ipstack.net.udp.DatagramSocket;
 import it.unipr.netsec.nemo.link.DataLink;
 
 
@@ -161,9 +161,9 @@ public class Ip4Host extends Ip4Node {
 	/** Starts a HTTP server. */
 	public void startHttpServer() {
 		try {
-			http_server=new HttpServer(getIpStack().getTcpLayer(),80,new HttpServerListener() {
+			http_server=new HttpServer(getIpStack().getTcpLayer(),80,new Consumer<HttpRequestHandle>() {
 				@Override
-				public void onHttpRequest(HttpRequestHandle req_handle) {
+				public void accept(HttpRequestHandle req_handle) {
 					processHttpRequest(req_handle);
 				}			
 			});

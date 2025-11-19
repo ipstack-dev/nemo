@@ -4,10 +4,10 @@ package it.unipr.netsec.nemo.examples.p1;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.routing.Route;
-import it.unipr.netsec.ipstack.routing.RoutingFunction;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Route;
+import io.ipstack.net.packet.RoutingFunction;
 
 
 /** Routing function in a nxm network.

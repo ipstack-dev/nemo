@@ -3,8 +3,8 @@ package it.unipr.netsec.nemo.program.tcpdump;
 
 import java.util.ArrayList;
 
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.Packet;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.Packet;
 
 
 public class AddressMatch implements Match {

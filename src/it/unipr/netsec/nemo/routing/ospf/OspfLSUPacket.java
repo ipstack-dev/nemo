@@ -22,8 +22,8 @@ package it.unipr.netsec.nemo.routing.ospf;
 
 import org.zoolu.util.Bytes;
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.net.Address;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.packet.Address;
 
 
 /** Link State Update packet.

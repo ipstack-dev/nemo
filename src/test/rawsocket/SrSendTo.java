@@ -25,12 +25,12 @@ import java.net.NetworkInterface;
 import org.zoolu.util.Bytes;
 import org.zoolu.util.Flags;
 
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ethernet.EthPacket;
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.ip6.exthdr.SegmentRoutingHeader;
-import it.unipr.netsec.rawsocket.*;
+import io.ipstack.net.ethernet.EthAddress;
+import io.ipstack.net.ethernet.EthPacket;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.ip6.exthdr.SegmentRoutingHeader;
+import io.ipstack.net.rawsocket.*;
 
 
 /** Program for sending SR IPv6 packets.

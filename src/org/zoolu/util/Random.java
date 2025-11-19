@@ -57,6 +57,7 @@ public class Random {
 
 	/** Returns a random integer between 0 and n-1 */
 	public static int nextInt(int n) {
+		if (n<=0) throw new RuntimeException("bound must be positive ("+n+")");
 		return Math.abs(rand.nextInt())%n;
 	}
 
@@ -67,6 +68,7 @@ public class Random {
 
 	/** Returns a random long between 0 and n-1 */
 	public static long nextLong(long n) {
+		if (n<=0) throw new RuntimeException("bound must be positive ("+n+")");
 		return Math.abs(rand.nextLong())%n;
 	}
 	/** Returns a random boolean */
@@ -81,6 +83,7 @@ public class Random {
 
 	/** Returns a random array of bytes */
 	public static byte[] nextBytes(int len) {
+		if (len<0) throw new RuntimeException("array length cannot be negative ("+len+")");
 		byte[] data=new byte[len];
 		nextBytes(data);
 		return data;
@@ -93,6 +96,7 @@ public class Random {
 
 	/** Returns a random String */
 	public static String nextString(int len) {
+		if (len<0) throw new RuntimeException("string length cannot be negative ("+len+")");
 		byte[] buff=new byte[len];
 		for (int i=0; i<len; i++) {
 			int n=nextInt(62);
@@ -103,6 +107,7 @@ public class Random {
 
 	/** Returns a random numeric String */
 	public static String nextNumString(int len) {
+		if (len<0) throw new RuntimeException("string length cannot be negative ("+len+")");
 		byte[] buff=new byte[len];
 		for (int i=0; i<len; i++) buff[i]=(byte)(48+nextInt(10));
 		return new String(buff);
@@ -110,6 +115,7 @@ public class Random {
 
 	/** Returns a random hexadecimal String */
 	public static String nextHexString(int len) {
+		if (len<0) throw new RuntimeException("string length cannot be negative ("+len+")");
 		byte[] buff=new byte[len];
 		for (int i=0; i<len; i++) {
 			int n=nextInt(16);

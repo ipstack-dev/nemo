@@ -23,19 +23,16 @@
 
 package org.zoolu.util;
 
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 
 
-/** Class that collects various system methods.
+/** Mixed collection of various static methods.
  */
 public class SystemUtils {
-	
-	/** Default logger */
-	protected static Logger DEFAULT_LOGGER=null;
-
 
 	/** Causes the current thread to sleep for the specified number of milliseconds.
 	 * Differently from method {@link Thread#sleep(long)}, it never throws an {@link InterruptedException}.
@@ -85,6 +82,20 @@ public class SystemUtils {
 			}
 		}.start();
 	}
+	
+	/** Runs a Runnable object in a new thread. The Runnable method may throw an exception.
+	 * <p>
+	 * If an exception is thrown, it is caught and the stack trace is printed to the standard error. */
+	public static void run(RunnableWithException r) {
+		new Thread(()->{
+			try { r.run(); } catch (Exception e) { e.printStackTrace(); }
+		}).start();		
+	}
+
+	/** Runnable that may throw exceptions. */
+	public static interface RunnableWithException {
+		public void run() throws Exception;
+	}
 
 	/** Exits printing the stack trace. */
 	public static void exitWithStackTrace() {
@@ -93,6 +104,37 @@ public class SystemUtils {
 			e.printStackTrace();
 			System.exit(0);
 		}		
+	}
+	
+	/** Exits after pressing 'Enter'. */
+	public static void exitWhenPressingEnter() {
+		System.out.println("Press <Enter> to exit");
+		run(()->{
+			new BufferedReader(new InputStreamReader(System.in)).readLine();
+			System.exit(0);
+		});
+	}
+	
+	/**
+	 * @return the exception stack trace */
+	public static String toString(Exception e) {
+		return toString(e,false);
+	}
+	
+	/** Gets the exception stack trace.
+	 * @param e the exception
+	 * @param reason whether considering only the "Caused by:" part of the trace, if present
+	 * @return the exception trace */
+	public static String toString(Exception e, boolean reason) {
+		StringWriter sw= new StringWriter();
+		PrintWriter pw= new PrintWriter(sw);
+		e.printStackTrace(pw);
+		String err= sw.toString();
+		if (reason) {
+			int causedBy= err.indexOf("Caused by: ");
+			if (causedBy>=0) err= err.substring(causedBy+11);
+		}
+		return err;
 	}
 	
 	/** Loads a library.
@@ -118,7 +160,7 @@ public class SystemUtils {
 	 * It is the same as method {@link java.lang.Class#getSimpleName()}
 	 * @param c a class
 	 * @return the class name */
-	public static String getSimpleClassName(Class c) {
+	public static String getSimpleClassName(Class<?> c) {
 		if (c==null) return null;
 		/*Package p=c.getPackage();
 		if (p==null) return c.getName();
@@ -139,39 +181,6 @@ public class SystemUtils {
 	 * @return the read line (or <code>null</code> if an error occurred) */
 	public static String readLine() {
 		try { return new BufferedReader(new InputStreamReader(System.in)).readLine(); } catch (Exception e) { return null; }
-	}
-
-	/** Sets the default system logger.
-	 * @param default_logger the default logger */
-	public static void setDefaultLogger(Logger default_logger)  {
-		DEFAULT_LOGGER=default_logger;
-	}
-
-	/** Gets the default system logger.
-	 * @return the default logger */
-	public static Logger getDefaultLogger()  {
-		return DEFAULT_LOGGER;
-	}
-
-	/** Logs a message.
-	  * @param str the message to be logged */
-	public static void log(String str) {
-		log(LoggerLevel.INFO,(Class)null,str);
-	}
-
-	/** Logs a message.
-	 * @param level log level 
-	  * @param str the message to be logged */
-	public static void log(LoggerLevel level, String str) {
-		log(level,(Class)null,str);
-	}
-
-	/** Logs a message.
-	 * @param level log level 
-	 * @param src_class the class that log refers to
-	 * @param str the message to be logged */
-	public static void log(LoggerLevel level, Class src_class, String str) {
-		if (DEFAULT_LOGGER!=null) DEFAULT_LOGGER.log(level,src_class,str);
 	}
 
 	/** Gets a string from an array of objects using the given separator.

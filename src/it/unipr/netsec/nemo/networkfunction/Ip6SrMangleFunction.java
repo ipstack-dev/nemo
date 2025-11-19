@@ -19,20 +19,17 @@
 
 package it.unipr.netsec.nemo.networkfunction;
 
-
-
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.ip6.exthdr.DestinationOptionsHeader;
-import it.unipr.netsec.ipstack.ip6.exthdr.ExtensionHeader;
-import it.unipr.netsec.ipstack.ip6.exthdr.ExtensionHeaderOption;
-import it.unipr.netsec.ipstack.ip6.exthdr.RoutingHeader;
-import it.unipr.netsec.ipstack.ip6.exthdr.SegmentRoutingHeader;
-
 import org.zoolu.util.Bytes;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.ip6.exthdr.DestinationOptionsHeader;
+import io.ipstack.net.ip6.exthdr.ExtensionHeader;
+import io.ipstack.net.ip6.exthdr.ExtensionHeaderOption;
+import io.ipstack.net.ip6.exthdr.RoutingHeader;
+import io.ipstack.net.ip6.exthdr.SegmentRoutingHeader;
 
 
 /** It mangles the IPv6 header in order to masquerade the presence of the IPv6 SR Header (SRH).
@@ -49,7 +46,7 @@ public class Ip6SrMangleFunction extends NetworkFunction {
 	
 	/** Prints a debug message. */
 	private static void debug(String str) {
-		if (DEBUG) SystemUtils.log(LoggerLevel.DEBUG,Ip6SrMangleFunction.class,str);
+		if (DEBUG) DefaultLogger.log(LoggerLevel.DEBUG,Ip6SrMangleFunction.class,str);
 	}
 
 	

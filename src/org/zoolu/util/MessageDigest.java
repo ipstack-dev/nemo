@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Luca Veltri, University of Parma
+ * Copyright (c) 2023 Luca Veltri, University of Parma
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,49 +20,50 @@
 
 package org.zoolu.util;
 
+import java.security.NoSuchAlgorithmException;
 
 
-/** Generic hash/message-digest algorithm.
-  */
-public abstract class MessageDigest {
+/** Static methods for obtaining default message-digest algorithms.
+ * In case the algorithm is not supported a RuntimeException is thrown in place of NoSuchAlgorithmException.
+ */
+public class MessageDigest {
+	private MessageDigest() {}
 	
-	/** MessageDigest block update operation.
-	  * Continues a message-digest operation,
-	  * processing another message block, and updating the context. */
-	abstract public MessageDigest update(byte[] buffer, int offset, int len);
-
-
-	/** MessageDigest block update operation.
-	  * Continues a message-digest operation,
-	  * processing another message block, and updating the context. */
-	public MessageDigest update(String str) {
-		byte[] buf=str.getBytes();
-		return update(buf,0,buf.length);
+	/**
+	 * @return default java implementation of MD5 hash algorithm.
+	 */
+	public static java.security.MessageDigest getMD5() {
+		return getInstance("MD5");
 	}
 
-
-	/** MessageDigest block update operation.
-	  * Continues a message-digest operation,
-	  * processing another message block, and updating the context. */
-	public MessageDigest update(byte[] buffer) {
-		return update(buffer,0,buffer.length);
+	
+	/**
+	 * @return default java implementation of SHA1 hash algorithm.
+	 */
+	public static java.security.MessageDigest getSHA1() {
+		return getInstance("SHA-1");
 	}
-
-
-	/** MessageDigest finalization. Ends a message-digest operation, writing the
-	  * the message digest and zeroizing the context. */
-	abstract public byte[] doFinal();
-
-
-	/** Gets the MessageDigest. The same as doFinal(). */
-	public byte[] getDigest() {
-		return doFinal();
+	
+	
+	/**
+	 * @return default java implementation of SHA2-256 hash algorithm.
+	 */
+	public static java.security.MessageDigest getSHA256() {
+		return getInstance("SHA-256");
 	}
-
-
-	/** Gets the Message Digest as string of hex values. */
-	public String asHex() {
-		return Bytes.toHex(doFinal());
+	
+	
+	/**
+	 * @return default java implementation of the given algorithm.
+	 * Note: In case the algorithm is not supported a RuntimeException is thrown.
+	 */
+	public static java.security.MessageDigest getInstance(String algo) {
+		try {
+			return java.security.MessageDigest.getInstance(algo);
+		}
+		catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e.getMessage());
+		}		
 	}
-
+	
 }

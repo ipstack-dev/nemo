@@ -3,12 +3,12 @@ package it.unipr.netsec.nemo.examples;
 
 import java.io.IOException;
 
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.net.NetInterface;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.tuntap.Ip4TuntapInterface;
 import it.unipr.netsec.nemo.ip.Ip4Host;
-import it.unipr.netsec.tuntap.Ip4TuntapInterface;
 
 
 /** Simple host attached to a TUN interface.

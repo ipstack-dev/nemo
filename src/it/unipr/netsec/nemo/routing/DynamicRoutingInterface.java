@@ -20,8 +20,8 @@
 package it.unipr.netsec.nemo.routing;
 
 
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.Packet;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.Packet;
 
 
 /** Node interface for the dynamic routing.

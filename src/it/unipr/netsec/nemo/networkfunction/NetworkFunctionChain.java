@@ -19,8 +19,8 @@
 
 package it.unipr.netsec.nemo.networkfunction;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
 /** Chain of Network Functions
  */
@@ -43,7 +43,7 @@ public class NetworkFunctionChain extends NetworkFunction {
 	@Override
 	public int processPacket(byte[] buf, int len) {
 		for (NetworkFunction nf: network_functions) {
-			if (DEBUG) SystemUtils.log(LoggerLevel.DEBUG,NetworkFunctionChain.class,"qnum="+qnum+", NF="+nf.toString());
+			if (DEBUG) DefaultLogger.log(LoggerLevel.DEBUG,NetworkFunctionChain.class,"qnum="+qnum+", NF="+nf.toString());
 			len=nf.processPacket(buf,len);
 			if (len==0) break;
 		}

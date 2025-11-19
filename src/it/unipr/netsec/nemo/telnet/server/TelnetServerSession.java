@@ -1,20 +1,20 @@
 package it.unipr.netsec.nemo.telnet.server;
 
+import static org.zoolu.util.log.LoggerLevel.*;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import org.zoolu.util.Bytes;
-import org.zoolu.util.LoggerLevel;
 import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
-import it.unipr.netsec.ipstack.stack.IpStack;
+import io.ipstack.net.stack.IpStack;
 import it.unipr.netsec.nemo.program.Program;
 import it.unipr.netsec.nemo.ip.Ip4Node;
 import it.unipr.netsec.nemo.program.Passwd;
 import it.unipr.netsec.nemo.telnet.Telnet;
-
-import static org.zoolu.util.LoggerLevel.*;
 
 
 /** Handler of a TELNET server session.
@@ -26,7 +26,7 @@ public class TelnetServerSession {
 
 	/** Logs a message. */
 	private void log(LoggerLevel level, String str) {
-		SystemUtils.log(level,null,toString()+": "+str);
+		DefaultLogger.log(level,null,toString()+": "+str);
 	}
 
 	

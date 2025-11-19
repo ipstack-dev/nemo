@@ -19,20 +19,18 @@
 
 package it.unipr.netsec.nemo.link;
 
-
 import org.zoolu.util.Clock;
-import org.zoolu.util.Logger;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
 import org.zoolu.util.Timer;
 import org.zoolu.util.TimerListener;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.net.Address;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.NetInterfaceListener;
-import it.unipr.netsec.ipstack.net.Packet;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.packet.Address;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.NetInterfaceListener;
+import io.ipstack.net.packet.Packet;
 
 
 /** A pair of IP nodes attached to two links.
@@ -43,7 +41,7 @@ public class PacketGenerator extends DataLinkInterface {
 	public static boolean DEBUG=false;
 	
 	private void log(String str) {
-		SystemUtils.log(LoggerLevel.DEBUG,getClass(),str);
+		DefaultLogger.log(LoggerLevel.DEBUG,getClass(),str);
 	}
 	
 

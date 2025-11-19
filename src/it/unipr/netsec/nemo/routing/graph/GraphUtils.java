@@ -19,16 +19,14 @@
 
 package it.unipr.netsec.nemo.routing.graph;
 
-
-//import it.unipr.netsec.nemo.routing.sdn.PathInfo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
 
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
 
 
 /** Collection of static methods for managing Graphs.
@@ -40,7 +38,7 @@ public abstract class GraphUtils {
 	
 	/** Prints a debug message. */
 	private static void debug(String str) {
-		SystemUtils.log(LoggerLevel.DEBUG,GraphUtils.class,str);
+		DefaultLogger.log(LoggerLevel.DEBUG,GraphUtils.class,str);
 	}
 
 	/** Gets the shortest paths from a given node to all nodes

@@ -1,7 +1,7 @@
 package it.unipr.netsec.nemo.examples.p1;
 
 
-import it.unipr.netsec.ipstack.net.Packet;
+import io.ipstack.net.packet.Packet;
 
 
 /** Packet of protocol P1.

@@ -24,13 +24,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import it.unipr.netsec.ipstack.icmp6.SolicitedNodeMulticastAddress;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.IpAddress;
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.Packet;
+import io.ipstack.net.icmp6.SolicitedNodeMulticastAddress;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.IpAddress;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Packet;
 import it.unipr.netsec.nemo.link.DataLink;
 import it.unipr.netsec.nemo.link.DataLinkInterface;
 

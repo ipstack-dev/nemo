@@ -23,8 +23,8 @@ package it.unipr.netsec.nemo.link;
 import org.zoolu.util.Bytes;
 import org.zoolu.util.Random;
 
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ethernet.EthPacket;
+import io.ipstack.net.ethernet.EthAddress;
+import io.ipstack.net.ethernet.EthPacket;
 
 
 /** Ethernet interface attached to a {@link DataLink link}.

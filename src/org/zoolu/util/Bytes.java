@@ -29,10 +29,11 @@ import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
 
-/** Class that collects static methods related to byte arrays.
+/** Collection of static methods related to byte arrays.
   */
-public abstract class Bytes {
-	
+public final class Bytes {
+	private Bytes() {}
+
 	// BYTE ARRAYS:
 
 	/** Copies an array of bytes into another array.
@@ -583,7 +584,28 @@ public abstract class Bytes {
 			str[index++]=(b>=32 && b<127)? (char)b : '.';
 		}
 		return new String(str);
+	}
+
+	/** Checks if an array of bytes contains only ASCII characters.
+	  * @param data the array of bytes
+	  * @return true if it contains only ASCII characters */
+	public static boolean isAscii(byte[] data) {
+		return isAscii(data,0,data.length);
 	}  
+	
+	/** Checks if an array of bytes contains only ASCII characters.
+	  * @param buf buffer containing the array of bytes
+	  * @param off the offset within the buffer
+	  * @param len the number of bytes
+	  * @return true if it contains only ASCII characters */
+	public static boolean isAscii(byte[] buf, int off, int len) {
+		int end=off+len;
+		while (off<end) {
+			byte b=buf[off++];
+			if (b<32 || b>=127) return false;
+		}
+		return true;
+	}
 
 	// BINARY STRINGS:
 

@@ -29,8 +29,10 @@ public class NetfilterQueue {
 	static {
 		try { System.loadLibrary("qfilter-64"); }
 		catch (Error e1) {
+			System.err.println(e1.getMessage());
 			try { System.loadLibrary("qfilter-32"); }
 			catch (Error e2) {
+				System.err.println(e2.getMessage());
 				System.loadLibrary("qfilter");
 			}
 		}

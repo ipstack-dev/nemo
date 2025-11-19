@@ -7,15 +7,15 @@ import java.util.ArrayList;
 
 import org.zoolu.util.Flags;
 
-import it.unipr.netsec.ipstack.analyzer.LibpcapHeader;
-import it.unipr.netsec.ipstack.analyzer.LibpcapSniffer;
-import it.unipr.netsec.ipstack.analyzer.ProtocolAnalyzer;
-import it.unipr.netsec.ipstack.analyzer.DumpSniffer;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.Packet;
-import it.unipr.netsec.ipstack.stack.IpStack;
+import io.ipstack.net.analyzer.DumpSniffer;
+import io.ipstack.net.analyzer.LibpcapHeader;
+import io.ipstack.net.analyzer.LibpcapSniffer;
+import io.ipstack.net.analyzer.ProtocolAnalyzer;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Packet;
+import io.ipstack.net.stack.IpStack;
 import it.unipr.netsec.nemo.program.tcpdump.AndMatch;
 import it.unipr.netsec.nemo.program.tcpdump.Ip4AddressMatch;
 import it.unipr.netsec.nemo.program.tcpdump.Match;

@@ -19,29 +19,6 @@
 
 package test;
 
-
-import it.unipr.netsec.ipstack.analyzer.ProtocolAnalyzer;
-import it.unipr.netsec.ipstack.ethernet.EthAddress;
-import it.unipr.netsec.ipstack.ethernet.EthLayer;
-import it.unipr.netsec.ipstack.ethernet.EthPacket;
-import it.unipr.netsec.ipstack.icmp4.PingClient;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4AddressPrefix;
-import it.unipr.netsec.ipstack.ip4.Ip4EthInterface;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
-import it.unipr.netsec.ipstack.link.Link;
-import it.unipr.netsec.ipstack.net.MultipleNetInterface;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.NetInterfaceListener;
-import it.unipr.netsec.ipstack.net.Node;
-import it.unipr.netsec.ipstack.net.Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Layer;
-import it.unipr.netsec.ipstack.ip4.Ip4Node;
-import it.unipr.netsec.ipstack.routing.Route;
-import it.unipr.netsec.ipstack.udp.DatagramSocket;
-import it.unipr.netsec.ipstack.udp.UdpLayer;
-import it.unipr.netsec.ipstack.util.IpAddressUtils;
 import it.unipr.netsec.nemo.ip.Ip4Host;
 import it.unipr.netsec.nemo.ip.Ip4Router;
 import it.unipr.netsec.nemo.ip.IpLink;
@@ -51,18 +28,38 @@ import it.unipr.netsec.nemo.link.PromiscuousDataLinkInterface;
 import it.unipr.netsec.nemo.routing.ShortestPathAlgorithm;
 import it.unipr.netsec.nemo.routing.graph.Graph;
 import it.unipr.netsec.nemo.routing.sdn.SdnRouting;
-import it.unipr.netsec.rawsocket.ethernet.RawEthInterface;
-import it.unipr.netsec.simulator.scheduler.VirtualClock;
-import it.unipr.netsec.tuntap.Ip4TunInterface;
-import it.unipr.netsec.tuntap.Ip4TuntapInterface;
-import it.unipr.netsec.tuntap.TapInterface;
 
 import org.zoolu.util.Bytes;
-import org.zoolu.util.Clock;
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
+
+import io.ipstack.net.analyzer.ProtocolAnalyzer;
+import io.ipstack.net.ethernet.EthAddress;
+import io.ipstack.net.ethernet.EthLayer;
+import io.ipstack.net.ethernet.EthPacket;
+import io.ipstack.net.icmp4.PingClient;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4AddressPrefix;
+import io.ipstack.net.ip4.Ip4EthInterface;
+import io.ipstack.net.ip4.Ip4Layer;
+import io.ipstack.net.ip4.Ip4Node;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
+import io.ipstack.net.link.Link;
+import io.ipstack.net.link.MultipleNetInterface;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.NetInterfaceListener;
+import io.ipstack.net.packet.Node;
+import io.ipstack.net.packet.Route;
+import io.ipstack.net.rawsocket.ethernet.RawEthInterface;
+import io.ipstack.net.tuntap.Ip4TunInterface;
+import io.ipstack.net.tuntap.Ip4TuntapInterface;
+import io.ipstack.net.tuntap.TapInterface;
+import io.ipstack.net.udp.DatagramSocket;
+import io.ipstack.net.udp.UdpLayer;
+import io.ipstack.net.util.IpAddressUtils;
 
 import java.net.DatagramPacket;
 import java.net.Inet4Address;
@@ -500,7 +497,7 @@ public class IPv4HybridRoutingTest {
 		}
 
 		if (verbose) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			//DataLink.DEBUG=true;
 			//DataLinkInterface.DEBUG=true;
 			//Ip4Link.DEBUG=true;

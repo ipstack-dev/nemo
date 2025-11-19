@@ -3,11 +3,11 @@ package it.unipr.netsec.nemo.examples;
 
 import java.io.IOException;
 
-import it.unipr.netsec.ipstack.analyzer.LibpcapHeader;
-import it.unipr.netsec.ipstack.analyzer.LibpcapSniffer;
-import it.unipr.netsec.ipstack.ip4.Ip4Address;
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.Ip4Prefix;
+import io.ipstack.net.analyzer.LibpcapHeader;
+import io.ipstack.net.analyzer.LibpcapSniffer;
+import io.ipstack.net.ip4.Ip4Address;
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.Ip4Prefix;
 import it.unipr.netsec.nemo.ip.Ip4Host;
 import it.unipr.netsec.nemo.ip.Ip4Router;
 import it.unipr.netsec.nemo.ip.IpLink;

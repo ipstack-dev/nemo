@@ -25,7 +25,7 @@ import java.io.IOException;
 
 /** It analyzes all packets captured at data-link level.
  * <p> 
- * It uses {@link it.unipr.netsec.rawsocket.RawLinkSocket}, that in turn uses a PF_PACKET SOCK_RAW socket.
+ * It uses {@link io.ipstack.net.rawsocket.RawLinkSocket}, that in turn uses a PF_PACKET SOCK_RAW socket.
  * Since PF_PACKET SOCK_RAW sockets are not supported neither in Windows OS neither nor in Mac OS,
  * TcpDump can be run only on Linux OS.
  */

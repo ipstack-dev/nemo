@@ -19,20 +19,6 @@
 
 package test;
 
-
-import it.unipr.netsec.ipstack.ip4.Ip4Packet;
-import it.unipr.netsec.ipstack.ip4.IpAddress;
-import it.unipr.netsec.ipstack.ip4.IpPrefix;
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6AddressPrefix;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.ip6.Ip6Prefix;
-import it.unipr.netsec.ipstack.ip6.exthdr.SegmentRoutingHeader;
-import it.unipr.netsec.ipstack.net.NetInterface;
-import it.unipr.netsec.ipstack.net.Node;
-import it.unipr.netsec.ipstack.net.Packet;
-import it.unipr.netsec.ipstack.udp.UdpPacket;
-import it.unipr.netsec.ipstack.util.IpAddressUtils;
 import it.unipr.netsec.nemo.ip.Ip6Host;
 import it.unipr.netsec.nemo.ip.Ip6Node;
 import it.unipr.netsec.nemo.ip.Ip6Router;
@@ -45,9 +31,23 @@ import it.unipr.netsec.simulator.scheduler.VirtualClock;
 
 import org.zoolu.util.Clock;
 import org.zoolu.util.Flags;
-import org.zoolu.util.LoggerLevel;
-import org.zoolu.util.LoggerWriter;
-import org.zoolu.util.SystemUtils;
+import org.zoolu.util.log.DefaultLogger;
+import org.zoolu.util.log.LoggerLevel;
+import org.zoolu.util.log.WriterLogger;
+
+import io.ipstack.net.ip4.Ip4Packet;
+import io.ipstack.net.ip4.IpAddress;
+import io.ipstack.net.ip4.IpPrefix;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6AddressPrefix;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.ip6.Ip6Prefix;
+import io.ipstack.net.ip6.exthdr.SegmentRoutingHeader;
+import io.ipstack.net.packet.NetInterface;
+import io.ipstack.net.packet.Node;
+import io.ipstack.net.packet.Packet;
+import io.ipstack.net.udp.UdpPacket;
+import io.ipstack.net.util.IpAddressUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -207,7 +207,7 @@ public class IPv6SegmentRoutingTest {
 		}
 		// else
 		if (verbose) {
-			SystemUtils.setDefaultLogger(new LoggerWriter(System.out,LoggerLevel.DEBUG));
+			DefaultLogger.setLogger(new WriterLogger(System.out,LoggerLevel.DEBUG));
 			Node.DEBUG=true;
 			Ip6Node.DEBUG=true;			
 			Ip6Router.DEBUG=true;			

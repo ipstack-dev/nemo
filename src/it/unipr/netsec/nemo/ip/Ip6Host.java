@@ -22,10 +22,10 @@ package it.unipr.netsec.nemo.ip;
 
 import org.zoolu.util.ArrayUtils;
 
-import it.unipr.netsec.ipstack.ip6.Ip6Address;
-import it.unipr.netsec.ipstack.ip6.Ip6Packet;
-import it.unipr.netsec.ipstack.ip6.Ip6Prefix;
-import it.unipr.netsec.ipstack.net.NetInterface;
+import io.ipstack.net.ip6.Ip6Address;
+import io.ipstack.net.ip6.Ip6Packet;
+import io.ipstack.net.ip6.Ip6Prefix;
+import io.ipstack.net.packet.NetInterface;
 import it.unipr.netsec.nemo.link.DataLink;
 
 
